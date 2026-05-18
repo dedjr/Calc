@@ -1,250 +1,257 @@
+--- 1. AGEN CODER SEDANG MERANCANG WEB (FONT PREMIUM, KOLOM RATA + IKON PLTS) ---
+
+--- 2. AGEN TESTER SEDANG MEMERIKSA KERAPIAN LAYOUT, FONT & IKON VISUAL ---
+
+--- KODE FINAL HASIL REVISI TOTAL (SIAP DI-COPY KE GITHUB): ---
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEBATRE - Pusat Edukasi & Kalkulator Baterai LiFePO4</title>
-    <!-- Favicon: Menggunakan SVG inline untuk ikon baterai sederhana -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233B82F6' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E" type="image/svg+xml">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Note: For production, it's recommended to install Tailwind locally and purge unused CSS for optimal performance. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome CDN for Icons -->
+    <!-- Using a stable version (6.4.2) for better reliability than beta3 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxS-d-m8qXDgrrBwBa2cceCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
-        /* Custom styles for critical UI/UX accessibility (Aged 40+ Users) */
-        /* Mengoverride atau memperluas kelas Tailwind untuk ukuran font dan padding ekstra besar */
-        .extra-large-input {
-            font-size: 2.5rem; /* ~text-4xl */
-            padding: 1.5rem;   /* Generous padding */
-            border-width: 3px;
-            border-color: #64748b; /* slate-500 */
-            color: #1e293b; /* slate-900 */
-            background-color: #f8fafc; /* slate-50 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
         }
-        .extra-large-select {
-            font-size: 2.5rem; /* ~text-4xl */
+        .container-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem; /* Equivalent to p-10 */
+            margin-bottom: 2rem;
+        }
+        .input-group label {
+            font-weight: 500;
+            color: #4a5568; /* Tailwind gray-700 */
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem; /* py-3 px-4 */
+            border: 1px solid #e2e8f0; /* Tailwind gray-200 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 1rem;
+            color: #2d3748; /* Tailwind gray-800 */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            -moz-appearance: textfield; /* Hide Firefox spinner */
+        }
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .input-group input[type="number"]:focus {
+            outline: none;
+            border-color: #4c51bf; /* Tailwind indigo-600 */
+            box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.2); /* Tailwind indigo-200 with opacity */
+        }
+        .result-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Ensures content is centered vertically if heights vary slightly */
+            height: 100%; /* Important for equal height in flex/grid context */
+            text-align: center;
             padding: 1.5rem;
-            border-width: 3px;
-            border-color: #64748b; /* slate-500 */
-            color: #1e293b; /* slate-900 */
-            background-color: #f8fafc; /* slate-50 */
+            border-radius: 10px;
+            background-color: #f7fafc; /* Tailwind gray-50 */
+            border: 1px solid #edf2f7; /* Tailwind gray-100 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease-in-out;
         }
-        .extra-large-button {
-            font-size: 2.5rem; /* ~text-4xl */
-            padding: 1.5rem 3rem; /* Extra large padding */
-            border-width: 3px;
-            border-color: #1d4ed8; /* blue-700 */
+        .result-card:hover {
+            transform: translateY(-5px);
         }
-        .extra-large-text-result {
-            font-size: 3.5rem; /* ~text-6xl, bahkan lebih besar dari text-5xl */
-            font-weight: bold;
-            color: #1e293b; /* slate-900 */
+        .result-card .icon {
+            font-size: 3rem;
+            /* The generic indigo color is removed here to allow semantic colors to apply */
+            margin-bottom: 1rem;
         }
-        /* Tambahan styling untuk fokus dan hover agar lebih jelas dan aksesibel */
-        .extra-large-input:focus,
-        .extra-large-select:focus {
-            border-color: #3b82f6; /* blue-500 */
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5); /* Mimics Tailwind's ring-4 blue-500 with transparency */
-            outline: none; /* Remove default outline for cleaner focus */
+        /* Semantic colors for icons */
+        .icon-battery {
+            color: #22c55e; /* Tailwind green-500 */
         }
-        .extra-large-button:hover {
-            transform: scale(1.02); /* Sedikit efek zoom */
+        .icon-solar-panel {
+            color: #3b82f6; /* Tailwind blue-500 */
+        }
+        .icon-scc {
+            color: #f59e0b; /* Tailwind amber-500 */
+        }
+        .result-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748; /* Tailwind gray-800 */
+            line-height: 1;
+            margin-top: 0.5rem;
+        }
+        .result-card .unit {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4a5568; /* Tailwind gray-700 */
         }
     </style>
 </head>
-<body class="font-sans bg-slate-50 text-slate-900 antialiased">
+<body class="antialiased leading-relaxed">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-10">
 
-    <!-- Header/Hero Section -->
-    <header class="bg-blue-700 text-white py-16 px-4 shadow-xl">
-        <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">DEBATRE</h1>
-            <p class="text-2xl md:text-3xl font-light">Pusat Edukasi & Kalkulator Baterai LiFePO4</p>
-        </div>
-    </header>
+        <!-- Header Section -->
+        <header class="text-center mb-10 mt-8 w-full max-w-4xl">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-indigo-700 mb-4 leading-tight">
+                DEBATRE
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-700 font-medium max-w-3xl mx-auto">
+                Pusat Edukasi & Kalkulator Baterai LiFePO4
+            </p>
+            <p class="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
+                Hitung kebutuhan sistem baterai LiFePO4 Anda dengan mudah dan akurat.
+            </p>
+        </header>
 
-    <!-- Jumbo Calculator Component (Kritis: di bagian atas halaman) -->
-    <section id="calculator" class="py-16 md:py-24 px-4 bg-gradient-to-br from-blue-100 to-gray-100 border-b-8 border-blue-300">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-slate-800 leading-tight">
-                Kalkulator Kebutuhan Tenaga Surya & Baterai
-            </h2>
-            
-            <div class="bg-white p-6 md:p-12 rounded-lg shadow-2xl border-4 border-blue-400">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
-                    <!-- Input: Average Load (Watt) -->
-                    <div class="flex flex-col">
-                        <label for="watt" class="text-2xl font-semibold mb-4 text-slate-700">Beban Rata-rata (Watt)</label>
-                        <input type="number" id="watt" value="1000" min="1" 
-                               class="extra-large-input rounded-lg block w-full">
+        <main class="w-full max-w-4xl">
+            <!-- Input Form Section -->
+            <section class="container-box">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Estimasi Kebutuhan Sistem Baterai</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Daya Beban Watt Input -->
+                    <div class="input-group">
+                        <label for="watt">Daya Beban (Watt)</label>
+                        <input type="number" id="watt" placeholder="Contoh: 500" min="0" value="">
                     </div>
 
-                    <!-- Input: Daily Duration (Hours) -->
-                    <div class="flex flex-col">
-                        <label for="hours" class="text-2xl font-semibold mb-4 text-slate-700">Durasi Harian (Jam)</label>
-                        <input type="number" id="hours" value="8" min="1" 
-                               class="extra-large-input rounded-lg block w-full">
+                    <!-- Durasi Jam Input -->
+                    <div class="input-group">
+                        <label for="hours">Durasi (Jam)</label>
+                        <input type="number" id="hours" placeholder="Contoh: 8" min="0" value="">
                     </div>
 
-                    <!-- Input: System Voltage -->
-                    <div class="flex flex-col">
-                        <label for="voltage" class="text-2xl font-semibold mb-4 text-slate-700">Tegangan Sistem (Volt)</label>
-                        <select id="voltage" 
-                                class="extra-large-select rounded-lg block w-full">
-                            <option value="12">12V</option>
-                            <option value="24" selected>24V</option>
-                            <option value="48">48V</option>
-                        </select>
+                    <!-- Tegangan Volt Input -->
+                    <div class="input-group">
+                        <label for="voltage">Tegangan (Volt)</label>
+                        <input type="number" id="voltage" placeholder="Contoh: 12" min="0" value="">
                     </div>
                 </div>
+                <p class="text-sm text-gray-500 text-center mt-4">
+                    *Toleransi dan efisiensi sistem telah diperhitungkan secara otomatis. Masukkan angka positif.
+                </p>
+            </section>
 
-                <div class="text-center mb-12">
-                    <button id="calculateButton" 
-                            class="extra-large-button bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-300 ease-in-out shadow-xl">
-                        HITUNG SEKARANG
-                    </button>
+            <!-- Results Section -->
+            <section class="container-box">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Hasil Perhitungan Estimasi</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                    <!-- Kapasitas Baterai Card -->
+                    <div class="result-card">
+                        <i class="fas fa-car-battery icon icon-battery"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Kapasitas Baterai LiFePO4</h3>
+                        <p class="value" id="resultAh">0</p>
+                        <p class="unit">Ah</p>
+                    </div>
+
+                    <!-- Daya Panel Surya Card -->
+                    <div class="result-card">
+                        <i class="fas fa-solar-panel icon icon-solar-panel"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Daya Panel Surya Minimal</h3>
+                        <p class="value" id="resultWp">0</p>
+                        <p class="unit">Wp</p>
+                    </div>
+
+                    <!-- Amper SCC Card -->
+                    <div class="result-card">
+                        <i class="fas fa-bolt icon icon-scc"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Amper SCC (Solar Charge Controller)</h3>
+                        <p class="value" id="resultScc">0</p>
+                        <p class="unit">Ampere</p>
+                    </div>
                 </div>
+                <p class="text-sm text-gray-500 text-center mt-6">
+                    *Hasil adalah estimasi, selalu konsultasikan dengan ahli untuk desain sistem yang tepat.
+                </p>
+            </section>
+        </main>
 
-                <!-- Results Display -->
-                <div id="resultsDisplay" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-12 pt-8 border-t-4 border-blue-200">
-                    <div class="text-center bg-blue-50 p-6 rounded-lg border-2 border-blue-200 shadow-md">
-                        <p class="text-2xl md:text-3xl font-medium text-slate-700 mb-2">Kapasitas Baterai LiFePO4</p>
-                        <p id="battCapacity" class="extra-large-text-result text-blue-800">0 Ah</p>
-                        <p class="text-base text-slate-500 mt-2">(Termasuk margin keamanan 20%)</p>
-                    </div>
-
-                    <div class="text-center bg-blue-50 p-6 rounded-lg border-2 border-blue-200 shadow-md">
-                        <p class="text-2xl md:text-3xl font-medium text-slate-700 mb-2">Daya Panel Surya</p>
-                        <p id="solarPanel" class="extra-large-text-result text-blue-800">0 Wp</p>
-                        <p class="text-base text-slate-500 mt-2">(Asumsi 4 jam puncak matahari & rugi sistem 20%)</p>
-                    </div>
-
-                    <div class="text-center bg-blue-50 p-6 rounded-lg border-2 border-blue-200 shadow-md">
-                        <p class="text-2xl md:text-3xl font-medium text-slate-700 mb-2">Amper SCC (Charge Controller)</p>
-                        <p id="sccAmperage" class="extra-large-text-result text-blue-800">0 A</p>
-                        <p class="text-base text-slate-500 mt-2">(Disarankan tipe MPPT)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Educational Section -->
-    <section id="education" class="py-16 md:py-24 px-4 bg-white">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800 leading-tight">
-                Mengapa Memilih Baterai LiFePO4?
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                <!-- Card 1: Keamanan (Safety) -->
-                <div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border-2 border-gray-200 hover:shadow-xl transition-shadow duration-300">
-                    <div class="text-center mb-4">
-                        <span class="text-6xl md:text-7xl" role="img" aria-label="Ikon Perisai Keamanan">🛡️</span>
-                    </div>
-                    <h3 class="text-3xl md:text-4xl font-bold text-center mb-4 text-blue-700">Keamanan Unggul</h3>
-                    <p class="text-lg md:text-xl text-slate-700 text-center leading-relaxed">
-                        Baterai LiFePO4 jauh lebih stabil secara termal dan kimiawi, secara signifikan mengurangi risiko kebakaran atau ledakan dibandingkan jenis lithium-ion lainnya. Ideal untuk aplikasi rumah tangga dan industri.
-                    </p>
-                </div>
-
-                <!-- Card 2: Siklus Hidup Panjang (Lifecycles) -->
-                <div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border-2 border-gray-200 hover:shadow-xl transition-shadow duration-300">
-                    <div class="text-center mb-4">
-                        <span class="text-6xl md:text-7xl" role="img" aria-label="Ikon Siklus">🔄</span>
-                    </div>
-                    <h3 class="text-3xl md:text-4xl font-bold text-center mb-4 text-blue-700">Siklus Hidup Panjang</h3>
-                    <p class="text-lg md:text-xl text-slate-700 text-center leading-relaxed">
-                        Dengan lebih dari 2000 hingga 7000 siklus pengisian/pengosongan penuh, baterai LiFePO4 menawarkan umur pemakaian yang sangat panjang, menjadikannya investasi yang bijaksana dan tahan lama.
-                    </p>
-                </div>
-
-                <!-- Card 3: Efisiensi Tinggi (Efficiency) -->
-                <div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border-2 border-gray-200 hover:shadow-xl transition-shadow duration-300">
-                    <div class="text-center mb-4">
-                        <span class="text-6xl md:text-7xl" role="img" aria-label="Ikon Petir Efisiensi">⚡</span>
-                    </div>
-                    <h3 class="text-3xl md:text-4xl font-bold text-center mb-4 text-blue-700">Efisiensi Tinggi</h3>
-                    <p class="text-lg md:text-xl text-slate-700 text-center leading-relaxed">
-                        Menawarkan efisiensi round-trip (pengisian-pengosongan) hingga 99%, LiFePO4 memastikan daya yang Anda simpan hampir seluruhnya dapat digunakan, dengan minim kehilangan energi.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-blue-800 text-white py-12 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-xl md:text-2xl">&copy; 2023 DEBATRE. Semua Hak Dilindungi.</p>
-            <p class="text-lg mt-2">Dibuat dengan semangat energi terbarukan.</p>
-        </div>
-    </footer>
+        <!-- Footer Section -->
+        <footer class="text-center text-gray-600 text-sm mt-10 mb-8 max-w-4xl mx-auto">
+            <p>&copy; 2023 DEBATRE. Hak Cipta Dilindungi Undang-Undang.</p>
+            <p class="mt-1">Didedikasikan untuk edukasi sistem energi terbarukan.</p>
+        </footer>
+    </div>
 
     <script>
-        /**
-         * Fungsi untuk menghitung kebutuhan sistem tenaga surya dan baterai.
-         * Mengambil input dari Watt, Jam, dan Voltase sistem, lalu menampilkan 3 output.
-         */
+        // Get input elements
+        const wattInput = document.getElementById('watt');
+        const hoursInput = document.getElementById('hours');
+        const voltageInput = document.getElementById('voltage');
+
+        // Get output elements
+        const resultAh = document.getElementById('resultAh');
+        const resultWp = document.getElementById('resultWp');
+        const resultScc = document.getElementById('resultScc');
+
         function calculate() {
-            const wattInput = document.getElementById('watt').value;
-            const hoursInput = document.getElementById('hours').value;
-            const voltageInput = document.getElementById('voltage').value;
+            // Parse float values from inputs, defaulting to 0 if empty or invalid
+            const watt = parseFloat(wattInput.value) || 0;
+            const hours = parseFloat(hoursInput.value) || 0;
+            const voltage = parseFloat(voltageInput.value) || 0;
 
-            // Konversi nilai input ke tipe angka
-            const watt = parseFloat(wattInput);
-            const hours = parseFloat(hoursInput);
-            const voltage = parseInt(voltageInput);
+            let ah = 0; // Ampere-hours for battery capacity
+            let wp = 0; // Watt-peak for solar panel power
+            let scc = 0; // Amperage for Solar Charge Controller
 
-            // Dapatkan elemen untuk menampilkan hasil
-            const battCapacityOutput = document.getElementById('battCapacity');
-            const solarPanelOutput = document.getElementById('solarPanel');
-            const sccAmperageOutput = document.getElementById('sccAmperage');
-
-            // Validasi input: Jika input tidak valid (bukan angka atau nol/negatif), tampilkan 0 dan berhenti
-            if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0) {
-                battCapacityOutput.textContent = '0 Ah';
-                solarPanelOutput.textContent = '0 Wp';
-                sccAmperageOutput.textContent = '0 A';
-                return;
+            // Battery Capacity (Ah) calculation:
+            // Formula: ((Watt * Hours) / Voltage) * 1.2
+            // 1.2 factor accounts for ~20% system losses/safety margin for LiFePO4
+            if (voltage > 0) { // Prevent division by zero
+                ah = ((watt * hours) / voltage) * 1.2;
             }
 
-            // 1. Kapasitas Baterai LiFePO4 yang Dibutuhkan (Ah)
-            // Formula = ((Watt * Hours) / Voltage) * 1.2  [Termasuk margin keamanan 20%]
-            const batteryCapacityAh = ((watt * hours) / voltage) * 1.2;
-            battCapacityOutput.textContent = `${batteryCapacityAh.toFixed(2)} Ah`; // Tampilkan 2 angka di belakang koma
+            // Solar Panel Power (Wp) calculation:
+            // Formula: ((Watt * Hours) / 4) * 1.2
+            // '4' assumes an average of 4 effective peak sun hours per day,
+            // 1.2 factor for ~20% system losses/safety margin (e.g., panel degradation, shading, temperature).
+            wp = ((watt * hours) / 4) * 1.2;
 
-            // 2. Daya Panel Surya yang Dibutuhkan (Wp)
-            // Formula = ((Watt * Hours) / 4) * 1.2  [Asumsi 4 jam puncak matahari efektif, termasuk rugi sistem 20%]
-            const solarPanelWp = ((watt * hours) / 4) * 1.2;
-            solarPanelOutput.textContent = `${solarPanelWp.toFixed(2)} Wp`;
-
-            // 3. Amper SCC (Solar Charge Controller) yang Dibutuhkan
-            // Formula = Total Wp / System Voltage [Rekomendasi tipe MPPT dalam deskripsi]
-            const sccAmperage = solarPanelWp / voltage;
-            sccAmperageOutput.textContent = `${sccAmperage.toFixed(2)} A (MPPT)`;
+            // Solar Charge Controller (SCC) Amperage calculation:
+            // Formula: Total Wp / Voltage
+            if (voltage > 0) { // Prevent division by zero
+                scc = wp / voltage;
+            }
+            
+            // Update results in the UI, rounding to the nearest integer for clear formatting.
+            // Using Math.max(0, ...) to ensure results are not negative, although
+            // the calculations with positive inputs should naturally yield positive results.
+            resultAh.textContent = Math.max(0, Math.round(ah));
+            resultWp.textContent = Math.max(0, Math.round(wp));
+            resultScc.textContent = Math.max(0, Math.round(scc));
         }
 
-        // Tambahkan event listener agar kalkulasi berjalan secara otomatis saat input berubah dan tombol ditekan
-        document.addEventListener('DOMContentLoaded', () => {
-            const wattInput = document.getElementById('watt');
-            const hoursInput = document.getElementById('hours');
-            const voltageInput = document.getElementById('voltage');
-            const calculateButton = document.getElementById('calculateButton');
-            const resultsDisplay = document.getElementById('resultsDisplay');
+        // Attach event listeners to all input fields to trigger calculation on input change
+        wattInput.addEventListener('input', calculate);
+        hoursInput.addEventListener('input', calculate);
+        voltageInput.addEventListener('input', calculate);
 
-            // Trigger kalkulasi setiap kali nilai input Watt atau Jam berubah
-            wattInput.addEventListener('input', calculate);
-            hoursInput.addEventListener('input', calculate);
-            // Trigger kalkulasi setiap kali pilihan Voltage berubah
-            voltageInput.addEventListener('change', calculate);
-            
-            // Trigger kalkulasi dan gulir ke hasil saat tombol "HITUNG SEKARANG" diklik
-            calculateButton.addEventListener('click', () => {
-                calculate();
-                resultsDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-            
-            // Lakukan kalkulasi awal saat halaman dimuat, menggunakan nilai default input
-            calculate(); 
-        });
+        // Perform an initial calculation when the page loads
+        // This ensures that the result cards display "0" if inputs are empty
+        calculate();
     </script>
 </body>
 </html>
