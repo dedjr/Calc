@@ -3,349 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEBATRE - Pusat Edukasi & Kalkulator Baterai LiFePO4</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#0f172a">
+    <title>DEBATRE - Kalkulator PLTS & Baterai LiFePO4</title>
+    <meta name="description" content="Kalkulator PLTS dan Baterai LiFePO4 real-time oleh DEBATRE. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for the gradient text */
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        input[type="number"] { -moz-appearance: textfield; }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
         .gradient-text {
+            background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+            -webkit-background-clip: text;
             background-clip: text;
-            -webkit-background-clip: text; /* For Safari */
             color: transparent;
         }
-        /* Hide spin buttons for number inputs for a cleaner look */
-        input[type="number"] {
-            -moz-appearance: textfield; /* Firefox */
+        .card-glow {
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 20px 40px -20px rgba(6,182,212,0.25);
         }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none; /* Chrome, Safari, Edge */
-            margin: 0;
+        .pulse-dot {
+            width: 8px; height: 8px; border-radius: 9999px; background: #10b981;
+            box-shadow: 0 0 0 0 rgba(16,185,129,0.7);
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+            100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+        .arrow-flow {
+            color: #10b981;
+            font-size: 2rem;
+            font-weight: 900;
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-800 antialiased">
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 -right-40 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
+    </div>
 
-        <!-- Header -->
-        <header class="text-center mb-12 mt-4">
-            <h1 class="text-5xl md:text-6xl font-extrabold text-blue-800 leading-tight mb-4">
-                DEBATRE
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-600 font-medium">
-                Pusat Edukasi & Kalkulator Baterai LiFePO4
-            </p>
+    <div class="relative container mx-auto px-4 py-6 md:py-10 max-w-5xl">
+
+        <!-- HEADER: Title + Social side-by-side -->
+        <header class="flex flex-row items-center justify-between gap-3 sm:gap-6 mb-8 md:mb-12">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight gradient-text leading-none">DEBATRE</h1>
+                    <p class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Kalkulator PLTS & LiFePO4</p>
+                </div>
+            </div>
+
+            <nav class="flex items-center gap-2 sm:gap-3" aria-label="Sosial Media">
+                <!-- YouTube -->
+                <a href="https://youtube.com/@deddybaterai?si=mtB6g5QuR5iXd-g8" target="_blank" rel="noopener noreferrer"
+                   aria-label="YouTube"
+                   class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500 hover:bg-red-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-hover:text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </a>
+                <!-- TikTok -->
+                <a href="https://tiktok.com/@deddybaterai" target="_blank" rel="noopener noreferrer"
+                   aria-label="TikTok"
+                   class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:bg-cyan-400/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.93a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.36z"/>
+                    </svg>
+                </a>
+                <!-- Shopee -->
+                <a href="https://id.shp.ee/9cw63kdy?smtt=0.0.9" target="_blank" rel="noopener noreferrer"
+                   aria-label="Shopee"
+                   class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-orange-500 hover:bg-orange-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.4c-2.43 0-4.43 1.86-4.66 4.23H4.2a.6.6 0 0 0-.6.55l-.95 13.2A1.8 1.8 0 0 0 4.45 22.4h15.1a1.8 1.8 0 0 0 1.8-1.92l-.95-13.27a.6.6 0 0 0-.6-.55h-3.14C16.43 4.26 14.43 2.4 12 2.4zm0 1.6c1.55 0 2.83 1.16 3.05 2.63H8.95C9.17 5.16 10.45 4 12 4zm-3.4 6.4a.6.6 0 0 1 .6.6c0 .73.74 1.4 2 1.4 1.18 0 2-.6 2-1.32 0-.54-.4-.92-1.6-1.18l-.7-.16c-1.66-.36-2.7-1.2-2.7-2.62 0-1.55 1.4-2.72 3.2-2.72 1.84 0 3.2 1.05 3.2 2.5a.6.6 0 0 1-1.2 0c0-.7-.78-1.3-2-1.3-1.18 0-2 .65-2 1.52 0 .58.42.97 1.7 1.24l.66.14c1.6.34 2.64 1.2 2.64 2.58 0 1.65-1.4 2.74-3.2 2.74-1.95 0-3.2-.96-3.2-2.6a.6.6 0 0 1 .6-.6z"/>
+                    </svg>
+                </a>
+            </nav>
         </header>
 
-        <!-- Main Calculator Section -->
-        <main class="bg-white shadow-xl rounded-2xl p-6 md:p-10 mb-12 border border-blue-100">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-8 text-center">
-                Kalkulator Kebutuhan PLTS (Off-Grid)
+        <!-- HERO LIVE BADGE -->
+        <div class="flex justify-center mb-6">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold">
+                <span class="pulse-dot"></span>
+                Perhitungan Real-Time Otomatis
+            </div>
+        </div>
+
+        <!-- CALCULATOR -->
+        <main class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 card-glow">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                Kalkulator Kebutuhan PLTS
             </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Masukkan data, hasil tampil otomatis</p>
 
-            <!-- Input Fields -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                <!-- Daya Output Watt -->
+            <!-- INPUTS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div class="flex flex-col">
-                    <label for="wattInput" class="text-xl font-semibold text-gray-700 mb-2">Daya Output (Watt):</label>
-                    <input type="number" id="wattInput" value="500" min="1" placeholder="e.g., 500"
-                           class="w-full p-4 border-2 border-blue-300 rounded-lg focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300
-                                  text-3xl md:text-4xl font-bold text-gray-800 text-center">
+                    <label for="wattInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Daya Output (Watt)</label>
+                    <input type="number" id="wattInput" value="500" min="0" inputmode="numeric"
+                           class="w-full p-4 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-3xl sm:text-4xl font-black text-white text-center outline-none">
                 </div>
 
-                <!-- Jam Penggunaan -->
                 <div class="flex flex-col">
-                    <label for="hoursInput" class="text-xl font-semibold text-gray-700 mb-2">Jam Penggunaan (Jam):</label>
-                    <input type="number" id="hoursInput" value="6" min="1" placeholder="e.g., 6"
-                           class="w-full p-4 border-2 border-blue-300 rounded-lg focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300
-                                  text-3xl md:text-4xl font-bold text-gray-800 text-center">
+                    <label for="hoursInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Jam Penggunaan</label>
+                    <input type="number" id="hoursInput" value="6" min="0" inputmode="numeric"
+                           class="w-full p-4 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-3xl sm:text-4xl font-black text-white text-center outline-none">
                 </div>
 
-                <!-- Tegangan Sistem -->
                 <div class="flex flex-col">
-                    <label for="voltageInput" class="text-xl font-semibold text-gray-700 mb-2">Tegangan Sistem (Volt):</label>
-                    <div class="relative"> <!-- Wrapper for select and its custom arrow -->
+                    <label for="voltageInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Tegangan Sistem</label>
+                    <div class="relative">
                         <select id="voltageInput"
-                                class="w-full p-4 border-2 border-blue-300 rounded-lg focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300
-                                       text-3xl md:text-4xl font-bold text-gray-800 text-center bg-white appearance-none pr-10"> <!-- pr-10 for arrow space -->
-                            <option value="12">12 Volt</option>
-                            <option value="24" selected>24 Volt</option>
-                            <option value="48">48 Volt</option>
+                                class="w-full p-4 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-3xl sm:text-4xl font-black text-white text-center appearance-none pr-10 outline-none cursor-pointer">
+                            <option value="12">12 V</option>
+                            <option value="24" selected>24 V</option>
+                            <option value="48">48 V</option>
                         </select>
-                        <!-- Custom arrow for select, positioned vertically centered -->
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                            <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Calculation Trigger & Notes -->
-            <div class="flex justify-center mb-8">
-                <button id="calculateBtn"
-                        class="px-8 py-4 bg-blue-600 text-white font-bold text-2xl rounded-xl shadow-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-300">
-                    Hitung Kebutuhan!
-                </button>
+            <!-- RESULTS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Baterai (Ah) -->
+                <div class="relative bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="2" y="7" width="18" height="10" rx="2"/>
+                                <path d="M22 11v2"/>
+                                <path d="M6 10v4M10 10v4M14 10v4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-cyan-300 uppercase tracking-wider">Baterai LiFePO4</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultAh">0</span><span class="text-2xl sm:text-3xl text-cyan-400 ml-1">Ah</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">Asumsi DoD 80%</p>
+                </div>
+
+                <!-- Panel Surya (Wp) -->
+                <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-emerald-300 uppercase tracking-wider">Panel Surya</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
+                </div>
+
+                <!-- Arus (Ampere) -->
+                <div class="relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wider">Arus Maksimum</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultAmpere">0</span><span class="text-2xl sm:text-3xl text-amber-400 ml-1">A</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">Arus beban inverter</p>
+                </div>
             </div>
-            <p class="text-md text-gray-600 text-center mb-8 italic">
-                <span class="font-bold text-blue-700">Catatan:</span> Perhitungan ini adalah estimasi. Faktor seperti efisiensi inverter, kondisi cuaca, dan profil penggunaan sangat mempengaruhi hasil akhir.
-                Untuk baterai, asumsi <span class="font-bold text-blue-700">Depth of Discharge (DoD) 80%</span> digunakan. Untuk panel surya, diasumsikan <span class="font-bold text-blue-700">Peak Sun Hours (PSH) 5 jam/hari</span> dengan faktor keamanan 1.25.
+
+            <p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
+                <span class="font-semibold text-slate-300">Catatan:</span> Hasil adalah estimasi. Faktor efisiensi inverter, cuaca, dan profil penggunaan dapat mempengaruhi hasil aktual.
             </p>
-
-
-            <!-- Results Section -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                <!-- Result Card: Kapasitas Baterai (Ah) -->
-                <div class="bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-200 flex flex-col items-center text-center">
-                    <!-- Battery Icon -->
-                    <svg class="w-16 h-16 text-blue-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17 4H5c-1.104 0-2 .896-2 2v12c0 1.104.896 2 2 2h12c1.104 0 2-.896 2-2V6c0-1.104-.896-2-2-2zM5 6h12v12H5V6z"/>
-                        <path d="M21 7h-2v10h2c.552 0 1-.448 1-1V8c0-.552-.448-1-1-1z"/>
-                        <path d="M12 9c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3z"/>
-                        <path d="M12 11c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1z"/>
-                    </svg>
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">Kapasitas Baterai</h3>
-                    <p id="resultAh" class="text-6xl font-extrabold gradient-text bg-gradient-to-r from-blue-600 to-emerald-500">
-                        0 Ah
-                    </p>
-                </div>
-
-                <!-- Result Card: Daya Panel Surya (Wp) -->
-                <div class="bg-green-50 p-6 rounded-xl shadow-inner border border-green-200 flex flex-col items-center text-center">
-                    <!-- Solar Panel Icon -->
-                    <svg class="w-16 h-16 text-green-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
-                        <path d="M6 6h4v4H6zm0 5h4v4H6zm5-5h4v4h-4zm0 5h4v4h-4z"/>
-                    </svg>
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">Daya Panel Surya</h3>
-                    <p id="resultWp" class="text-6xl font-extrabold gradient-text bg-gradient-to-r from-blue-600 to-emerald-500">
-                        0 Wp
-                    </p>
-                </div>
-
-                <!-- Result Card: Arus Maksimum (Ampere) -->
-                <div class="bg-purple-50 p-6 rounded-xl shadow-inner border border-purple-200 flex flex-col items-center text-center">
-                    <!-- Generic Current Icon (e.g., an 'A' for Ampere or a circuit symbol) -->
-                    <svg class="w-16 h-16 text-purple-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                        <path d="M11 15h2v2h-2zm0-8h2v6h-2z"/>
-                    </svg>
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">Arus Maksimum</h3>
-                    <p id="resultAmpere" class="text-6xl font-extrabold gradient-text bg-gradient-to-r from-blue-600 to-emerald-500">
-                        0 Ampere
-                    </p>
-                </div>
-            </div>
         </main>
 
-        <!-- Visual Topology Diagram Section -->
-        <section class="bg-white shadow-xl rounded-2xl p-6 md:p-10 border border-emerald-100">
-            <h2 class="text-3xl md:text-4xl font-bold text-emerald-700 mb-8 text-center">
-                Panduan Topologi Pemasangan PLTS
+        <!-- TOPOLOGI -->
+        <section class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                Panduan Topologi Pemasangan
             </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Urutan koneksi sistem PLTS Off-Grid</p>
 
-            <div class="flex flex-col items-center space-y-8 md:space-y-0 md:flex-row md:justify-center md:space-x-4">
-
-                <!-- 1. PANEL SURYA -->
-                <div class="flex flex-col items-center p-4 bg-emerald-50 rounded-lg shadow-md border border-emerald-200 w-full md:w-auto flex-grow-0 md:flex-grow">
-                    <svg class="w-20 h-20 text-emerald-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
-                        <path d="M6 6h4v4H6zm0 5h4v4H6zm5-5h4v4h-4zm0 5h4v4h-4z"/>
-                    </svg>
-                    <p class="font-bold text-xl md:text-2xl text-emerald-800">1. PANEL SURYA</p>
+            <div class="flex flex-col md:flex-row md:items-stretch md:justify-between gap-3">
+                <!-- Step 1 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 1</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Panel Surya</p>
                 </div>
 
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold hidden md:block">→</div>
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold block md:hidden transform rotate-90">→</div>
-
-                <!-- 2. MPPT Controller -->
-                <div class="flex flex-col items-center p-4 bg-emerald-50 rounded-lg shadow-md border border-emerald-200 w-full md:w-auto flex-grow-0 md:flex-grow">
-                    <svg class="w-20 h-20 text-emerald-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM5 5h14l.001 14H5V5z"/>
-                        <path d="M12 7h-2v2h2v-2zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zm4-8h-2v2h2v-2zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
-                    </svg>
-                    <p class="font-bold text-xl md:text-2xl text-emerald-800">2. MPPT CONTROLLER</p>
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold hidden md:block">→</div>
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold block md:hidden transform rotate-90">→</div>
-
-                <!-- 3. LiFePO4 Battery -->
-                <div class="flex flex-col items-center p-4 bg-emerald-50 rounded-lg shadow-md border border-emerald-200 w-full md:w-auto flex-grow-0 md:flex-grow">
-                    <svg class="w-20 h-20 text-emerald-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17 4H5c-1.104 0-2 .896-2 2v12c0 1.104.896 2 2 2h12c1.104 0 2-.896 2-2V6c0-1.104-.896-2-2-2zM5 6h12v12H5V6z"/>
-                        <path d="M21 7h-2v10h2c.552 0 1-.448 1-1V8c0-.552-.448-1-1-1z"/>
-                        <path d="M12 9c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3z"/>
-                        <path d="M12 11c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1z"/>
-                    </svg>
-                    <p class="font-bold text-xl md:text-2xl text-emerald-800">3. BATERAI LiFePO4</p>
+                <!-- Step 2 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <path d="M8 10h8M8 14h8M10 8v8M14 8v8"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 2</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">MPPT/SCC</p>
                 </div>
 
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold hidden md:block">→</div>
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold block md:hidden transform rotate-90">→</div>
-
-                <!-- 4. Power Inverter -->
-                <div class="flex flex-col items-center p-4 bg-emerald-50 rounded-lg shadow-md border border-emerald-200 w-full md:w-auto flex-grow-0 md:flex-grow">
-                    <svg class="w-20 h-20 text-emerald-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM5 5h14l.001 14H5V5z"/>
-                        <path d="M12 7l4 4-4 4V7z"/> <!-- Right arrow for output -->
-                    </svg>
-                    <p class="font-bold text-xl md:text-2xl text-emerald-800">4. POWER INVERTER</p>
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold hidden md:block">→</div>
-                <div class="flex-shrink-0 text-4xl text-emerald-500 font-bold block md:hidden transform rotate-90">→</div>
+                <!-- Step 3 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="18" height="10" rx="2"/>
+                            <path d="M22 11v2"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 3</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Baterai LiFePO4</p>
+                </div>
 
-                <!-- 5. Rumah/Beban AC -->
-                <div class="flex flex-col items-center p-4 bg-emerald-50 rounded-lg shadow-md border border-emerald-200 w-full md:w-auto flex-grow-0 md:flex-grow">
-                    <svg class="w-20 h-20 text-emerald-600 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3L4 9v12h16V9L12 3zm0 1.69L18 9v10h-4V14h-4v5H6V9l6-4.31z"/>
-                    </svg>
-                    <p class="font-bold text-xl md:text-2xl text-emerald-800">5. RUMAH/BEBAN AC</p>
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-amber-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12h4l3-9 4 18 3-9h4"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-amber-400 font-bold mb-1">LANGKAH 4</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Inverter</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12L12 3l9 9M5 10v10h14V10"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 5</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Beban AC</p>
                 </div>
             </div>
 
-            <!-- Warning Box -->
-            <div class="mt-12 p-6 bg-red-100 border-l-8 border-red-500 text-red-800 rounded-lg shadow-md">
-                <p class="font-extrabold text-3xl mb-3 flex items-center">
-                    <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            <!-- Warning -->
+            <div class="mt-8 p-5 sm:p-6 bg-red-500/10 border-l-4 border-red-500 rounded-xl">
+                <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-red-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 0 0-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
                     </svg>
-                    PENTING!
-                </p>
-                <p class="text-2xl font-semibold leading-relaxed">
-                    Selalu hubungkan Baterai ke SCC (Solar Charge Controller) terlebih dahulu sebelum Solar Panel! Hal ini mencegah kerusakan pada SCC dan baterai.
-                </p>
+                    <div>
+                        <p class="font-extrabold text-lg sm:text-xl text-red-300 mb-1">PENTING!</p>
+                        <p class="text-sm sm:text-base text-red-100/90 leading-relaxed">
+                            Selalu hubungkan <span class="font-bold">Baterai ke SCC</span> terlebih dahulu, baru kemudian <span class="font-bold">Panel Surya ke SCC</span>. Urutan terbalik dapat merusak Solar Charge Controller.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 py-6 text-gray-500 text-lg">
-            &copy; <span id="currentYear"></span> DEBATRE. Hak Cipta Dilindungi.
+        <!-- FOOTER -->
+        <footer class="text-center py-6 text-slate-500 text-sm">
+            &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
         </footer>
-
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        (function() {
             const wattInput = document.getElementById('wattInput');
             const hoursInput = document.getElementById('hoursInput');
             const voltageInput = document.getElementById('voltageInput');
-            const calculateBtn = document.getElementById('calculateBtn');
             const resultAh = document.getElementById('resultAh');
             const resultWp = document.getElementById('resultWp');
             const resultAmpere = document.getElementById('resultAmpere');
-            const currentYearSpan = document.getElementById('currentYear');
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-            currentYearSpan.textContent = new Date().getFullYear();
+            function fmt(n) {
+                if (!isFinite(n)) return '0';
+                return Math.round(n).toLocaleString('id-ID');
+            }
 
-            const calculate = () => {
+            function calculate() {
                 const watt = parseFloat(wattInput.value);
                 const hours = parseFloat(hoursInput.value);
                 const voltage = parseFloat(voltageInput.value);
 
                 if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
-                    resultAh.textContent = '0 Ah';
-                    resultWp.textContent = '0 Wp';
-                    resultAmpere.textContent = '0 Ampere';
+                    resultAh.textContent = '0';
+                    resultWp.textContent = '0';
+                    resultAmpere.textContent = '0';
                     return;
                 }
 
-                // Calculations
-                // Kapasitas Baterai (Ah)
-                // Formula: (DayaOutputWatt * JamPenggunaan) / TeganganSistem / DoD_factor
-                // DoD_factor = 0.8 (for 80% Depth of Discharge for LiFePO4)
-                const requiredAh = (watt * hours) / voltage / 0.8;
-                resultAh.textContent = `${Math.ceil(requiredAh)} Ah`;
+                // Baterai (Ah) dengan DoD 80%
+                const ah = (watt * hours) / voltage / 0.8;
+                // Panel Surya (Wp), PSH 5 jam, faktor 1.25
+                const wp = (watt * hours * 1.25) / 5;
+                // Arus inverter (A)
+                const ampere = watt / voltage;
 
-                // Daya Panel Surya (Wp)
-                // Formula: (DayaOutputWatt * JamPenggunaan * Safety_Factor) / PSH_hours
-                // Safety_Factor = 1.25 (to account for system losses and ensure adequate charging)
-                // PSH_hours = 5 (Average Peak Sun Hours per day)
-                const requiredWp = (watt * hours * 1.25) / 5;
-                resultWp.textContent = `${Math.ceil(requiredWp)} Wp`;
-
-                // Arus Maksimum (Ampere)
-                // Formula: DayaOutputWatt / TeganganSistem
-                const maxAmpere = watt / voltage;
-                resultAmpere.textContent = `${maxAmpere.toFixed(1)} Ampere`;
-            };
-
-            // Attach event listeners for immediate calculation
-            wattInput.addEventListener('input', calculate);
-            hoursInput.addEventListener('input', calculate);
-            voltageInput.addEventListener('change', calculate);
-            calculateBtn.addEventListener('click', calculate); // Explicit button for user preference
-
-            // Initial calculation on page load
-            calculate();
-        });
-    </script>
-</body>
-</html>
-```
-                    <p id="resultScc" class="text-6xl font-black gradient-text-tiktok">0 Ampere</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer Section -->
-    <footer class="w-full max-w-6xl mx-auto mt-10 py-6 px-6 sm:px-8 text-center text-gray-500 text-sm border-t border-gray-200">
-        &copy; 2023 DEBATRE. Semua Hak Cipta Dilindungi. Didesain untuk kemudahan Anda.
-    </footer>
-
-    <!-- JavaScript for Calculations -->
-    <script>
-        const wattInput = document.getElementById('watt');
-        const hoursInput = document.getElementById('hours');
-        const voltageInput = document.getElementById('voltage');
-        const calculateButton = document.getElementById('calculateBtn');
-
-        const resultAh = document.getElementById('resultAh');
-        const resultWp = document.getElementById('resultWp');
-        const resultScc = document.getElementById('resultScc');
-
-        function calculate() {
-            const watt = parseFloat(wattInput.value);
-            const hours = parseFloat(hoursInput.value);
-            const voltage = parseFloat(voltageInput.value);
-
-            // Basic validation for inputs
-            if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
-                const invalidText = 'Input Invalid';
-                resultAh.textContent = invalidText;
-                resultWp.textContent = invalidText;
-                resultScc.textContent = invalidText;
-                return;
+                resultAh.textContent = fmt(Math.ceil(ah));
+                resultWp.textContent = fmt(Math.ceil(wp));
+                resultAmpere.textContent = ampere.toFixed(1);
             }
 
-            // Calculations based on the provided formulas
-            // Ah = Math.round(((Watt * Hours) / Voltage) * 1.2)
-            const ah = Math.round(((watt * hours) / voltage) * 1.2);
+            ['input', 'change'].forEach(ev => {
+                wattInput.addEventListener(ev, calculate);
+                hoursInput.addEventListener(ev, calculate);
+                voltageInput.addEventListener(ev, calculate);
+            });
 
-            // Wp = Math.round(((Watt * Hours) / 4) * 1.2) - (4 is typically considered average sun hours for calculation)
-            const wp = Math.round(((watt * hours) / 4) * 1.2);
-
-            // SCC = Math.round(Total Wp / Voltage) - (Simple calculation for MPPT Amperage)
-            const scc = Math.round(wp / voltage);
-
-            // Update the display with calculated values
-            resultAh.textContent = `${ah} Ah`;
-            resultWp.textContent = `${wp} Wp`;
-            resultScc.textContent = `${scc} Ampere`;
-        }
-
-        // Add event listeners to trigger calculation on button click and input changes
-        calculateButton.addEventListener('click', calculate);
-        wattInput.addEventListener('input', calculate);
-        hoursInput.addEventListener('input', calculate);
-        voltageInput.addEventListener('input', calculate);
-
-        // Perform initial calculation when the page loads to display default values
-        document.addEventListener('DOMContentLoaded', calculate);
+            calculate();
+        })();
     </script>
 </body>
 </html>
-```
