@@ -51,7 +51,6 @@
 
     <div class="relative container mx-auto px-4 py-6 md:py-10 max-w-5xl">
 
-        <!-- HEADER: Title + Social side-by-side -->
         <header class="flex flex-row items-center justify-between gap-3 sm:gap-6 mb-8 md:mb-12">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -66,15 +65,13 @@
             </div>
 
             <nav class="flex items-center gap-2 sm:gap-3" aria-label="Sosial Media">
-                <!-- YouTube -->
                 <a href="https://youtube.com/@deddybaterai?si=mtB6g5QuR5iXd-g8" target="_blank" rel="noopener noreferrer"
                    aria-label="YouTube"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500 hover:bg-red-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-hover:text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 alert.502-5.814a3.016 3.016 0 0 0 2.122-2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                 </a>
-                <!-- TikTok -->
                 <a href="https://tiktok.com/@deddybaterai" target="_blank" rel="noopener noreferrer"
                    aria-label="TikTok"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:bg-cyan-400/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
@@ -82,7 +79,6 @@
                         <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.93a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.36z"/>
                     </svg>
                 </a>
-                <!-- Shopee -->
                 <a href="https://id.shp.ee/9cw63kdy?smtt=0.0.9" target="_blank" rel="noopener noreferrer"
                    aria-label="Shopee"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-orange-500 hover:bg-orange-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
@@ -93,7 +89,6 @@
             </nav>
         </header>
 
-        <!-- HERO LIVE BADGE -->
         <div class="flex justify-center mb-6">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold">
                 <span class="pulse-dot"></span>
@@ -101,14 +96,12 @@
             </div>
         </div>
 
-        <!-- CALCULATOR -->
         <main class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 card-glow">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
                 Kalkulator Kebutuhan PLTS
             </h2>
             <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Masukkan data, hasil tampil otomatis</p>
 
-            <!-- INPUTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div class="flex flex-col">
                     <label for="wattInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Daya Output (Watt)</label>
@@ -138,9 +131,7 @@
                 </div>
             </div>
 
-            <!-- RESULTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Baterai (Ah) -->
                 <div class="relative bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
@@ -158,7 +149,6 @@
                     <p class="text-xs text-slate-400 mt-3">Asumsi DoD 80%</p>
                 </div>
 
-                <!-- Panel Surya (Wp) -->
                 <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
@@ -175,7 +165,6 @@
                     <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
                 </div>
 
-                <!-- Arus (Ampere) -->
                 <div class="relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
@@ -197,7 +186,15 @@
             </p>
         </main>
 
-        <!-- TOPOLOGI -->
+        <section id="shopeeSection" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 hidden">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.4c-2.43 0-4.43 1.86-4.66 4.23H4.2a.6.6 0 0 0-.6.55l-.95 13.2A1.8 1.8 0 0 0 4.45 22.4h15.1a1.8 1.8 0 0 0 1.8-1.92l-.95-13.27a.6.6 0 0 0-.6-.55h-3.14C16.43 4.26 14.43 2.4 12 2.4z"/></svg>
+                Rekomendasi Komponen Live Shopee
+            </h2>
+            <p class="text-slate-400 text-sm mb-6">Mencari ukuran pasaran terdekat otomatis di Shopee...</p>
+            <div id="shopeeProductList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </section>
+
         <section class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
                 Panduan Topologi Pemasangan
@@ -205,7 +202,6 @@
             <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Urutan koneksi sistem PLTS Off-Grid</p>
 
             <div class="flex flex-col md:flex-row md:items-stretch md:justify-between gap-3">
-                <!-- Step 1 -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -221,7 +217,6 @@
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 2 -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -237,7 +232,6 @@
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 3 -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -253,7 +247,6 @@
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 4 -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-amber-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -268,7 +261,6 @@
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 5 -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -280,7 +272,6 @@
                 </div>
             </div>
 
-            <!-- Warning -->
             <div class="mt-8 p-5 sm:p-6 bg-red-500/10 border-l-4 border-red-500 rounded-xl">
                 <div class="flex items-start gap-3">
                     <svg class="w-6 h-6 sm:w-7 sm:h-7 text-red-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -296,7 +287,6 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
         <footer class="text-center py-6 text-slate-500 text-sm">
             &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
         </footer>
@@ -304,19 +294,99 @@
 
     <script>
         (function() {
+            // ORIGINAL VARIABLE SELECTOR DO NOT EDIT
             const wattInput = document.getElementById('wattInput');
             const hoursInput = document.getElementById('hoursInput');
             const voltageInput = document.getElementById('voltageInput');
             const resultAh = document.getElementById('resultAh');
             const resultWp = document.getElementById('resultWp');
             const resultAmpere = document.getElementById('resultAmpere');
+            
+            // TAMBAHAN SELECTOR UNTUK BOT SCRAPER
+            const shopeeSection = document.getElementById('shopeeSection');
+            const shopeeProductList = document.getElementById('shopeeProductList');
+            
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            let searchTimeout;
 
             function fmt(n) {
                 if (!isFinite(n)) return '0';
                 return Math.round(n).toLocaleString('id-ID');
             }
 
+            // FUNGSI UTAMA BACKEND CALL VIA VERCEL + CRAWLBASE
+            async function cariKomponenShopee(keyword) {
+                shopeeSection.classList.remove('hidden');
+                shopeeProductList.innerHTML = `
+                    <div class="col-span-full text-center py-6 text-slate-400">
+                        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-orange-500 rounded-full mb-2"></div>
+                        <p class="text-xs">Mencari live pasaran '${keyword}' via Crawlbase...</p>
+                    </div>
+                `;
+
+                try {
+                    const urlApiVercel = `/api/get-shopee?query=${encodeURIComponent(keyword)}`;
+                    const response = await fetch(urlApiVercel);
+                    const result = await response.json();
+
+                    if (result.success && result.html) {
+                        parseDanTampilkanProduk(result.html);
+                    } else {
+                        throw new Error(result.error || "Gagal load data");
+                    }
+                } catch (error) {
+                    console.error("Error Scraper:", error);
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-red-400 bg-red-500/5 border border-red-500/20 rounded-xl">
+                            Gagal sinkronisasi data live Shopee. Silakan gunakan tautan official toko DEBATRE di atas.
+                        </div>
+                    `;
+                }
+            }
+
+            // PARSER MENERJEMAHKAN ISI SOURCE CODE SHOPEE MENJADI KARTU PRODUK HTML
+            function parseDanTampilkanProduk(htmlSource) {
+                shopeeProductList.innerHTML = "";
+                const regexItem = /"itemid":\s*(\d+),\s*"shopid":\s*(\d+),\s*"name":\s*"([^"]+)"/g;
+                let match;
+                let count = 0;
+                let htmlCards = "";
+
+                while ((match = regexItem.exec(htmlSource)) !== null && count < 4) {
+                    const itemId = match[1];
+                    const shopId = match[2];
+                    const productName = match[3];
+                    const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+
+                    htmlCards += `
+                        <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
+                           class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
+                            <div>
+                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-bold px-2 py-0.5 rounded-full mb-2 inline-block">Pasaran Terpilih</span>
+                                <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                                <span>Cek Produk</span>
+                                <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
+                            </div>
+                        </a>
+                    `;
+                    count++;
+                }
+
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            HTML terambil. Coba ganti spesifikasi untuk memicu kata kunci baru.
+                        </div>
+                    `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // ORIGINAL LOGIC CALCULATION ROUTINE DO NOT EDIT
             function calculate() {
                 const watt = parseFloat(wattInput.value);
                 const hours = parseFloat(hoursInput.value);
@@ -326,21 +396,42 @@
                     resultAh.textContent = '0';
                     resultWp.textContent = '0';
                     resultAmpere.textContent = '0';
+                    shopeeSection.classList.add('hidden');
                     return;
                 }
 
-                // Baterai (Ah) dengan DoD 80%
+                // ORIGINAL FORMULAS DO NOT EDIT
                 const ah = (watt * hours) / voltage / 0.8;
-                // Panel Surya (Wp), PSH 5 jam, faktor 1.25
                 const wp = (watt * hours * 1.25) / 5;
-                // Arus inverter (A)
                 const ampere = watt / voltage;
 
-                resultAh.textContent = fmt(Math.ceil(ah));
-                resultWp.textContent = fmt(Math.ceil(wp));
+                const finalAh = Math.ceil(ah);
+                const finalWp = Math.ceil(wp);
+
+                resultAh.textContent = fmt(finalAh);
+                resultWp.textContent = fmt(finalWp);
                 resultAmpere.textContent = ampere.toFixed(1);
+
+                // --- INTEGRASI BARU: LOGIKA RANGE PILIHAN PASARAN BATERAI ---
+                const pasaranAh = [15, 22, 50, 52, 100, 120, 200];
+                let alternatifAh = pasaranAh[pasaranAh.length - 1]; // Default ke 200Ah jika di atas batas maksimum
+
+                // Cari ukuran pasaran yang paling pas atau sedikit di atas kebutuhan murni kalkulator
+                for (let i = 0; i < pasaranAh.length; i++) {
+                    if (pasaranAh[i] >= finalAh) {
+                        alternatifAh = pasaranAh[i];
+                        break;
+                    }
+                }
+
+                // DEBOUNCE TIMER: Mencegah pemborosan kuota API saat user mengubah input numerik
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    cariKomponenShopee(`baterai lifepo4 ${alternatifAh}ah ${voltage}v`);
+                }, 1500);
             }
 
+            // ORIGINAL EVENT BINDING DO NOT EDIT
             ['input', 'change'].forEach(ev => {
                 wattInput.addEventListener(ev, calculate);
                 hoursInput.addEventListener(ev, calculate);
