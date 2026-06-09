@@ -346,39 +346,163 @@
                 }
             }
 
-            // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK
+                        // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK (DI-UPDATE AGAR LEBIH AKURAT)
             function parseDanTampilkanProduk(htmlSource) {
                 shopeeProductList.innerHTML = "";
-                const regexItem = /"itemid":\s*(\d+),\s*"shopid":\s*(\d+),\s*"name":\s*"([^"]+)"/g;
+                
+                // Regex baru yang lebih fleksibel mencari itemid dan shopid baik berdekatan maupun terpisah dalam manifest string Shopee
+                const regexItem = /itemid["\s:]+(\d+).*?shopid["\s:]+(\d+).*?name["\s:]+"([^"]+)"/gi;
+                
+                // Backup Regex jika struktur di atas meleset (mencari model id universal)
+                const regexBackup = /{"itemid":\s*(\d+),\s*"shopid":\s*(\d+)[^}]+"name":\s*"([^"]+)"/g;
+                
                 let match;
                 let count = 0;
                 let htmlCards = "";
+                let itemsFound = [];
 
-                // Loop hingga menemukan maksimal 5 produk terbaik
+                // Coba gunakan Regex Utama terlebih dahulu
                 while ((match = regexItem.exec(htmlSource)) !== null && count < 5) {
                     const itemId = match[1];
                     const shopId = match[2];
-                    const productName = match[3];
-                    const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+                    const productName = match[3].replace(/\\u[\dA-F]{4}/gi, match => String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16))); // Decode unicode jika ada
+                    
+                    // Hindari duplikasi id produk yang sama
+                    if (!itemsFound.includes(itemId)) {
+                        itemsFound.push(itemId);
+                        htmlCards += buatTemplateCard(shopId, itemId, productName);
+                        count++;
+                    }
+                }
 
-                    htmlCards += `
-                        <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
-                           class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
-                            <div>
-                                <div class="flex items-center gap-1.5 mb-2">
-                                    <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
-                                    <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                                        ★ 4.5+
-                                    </span>
-                                </div>
-                                <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
-                            </div>
-                            <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                                <span>Lihat Toko & Detail</span>
-                                <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
-                            </div>
-                        </a>
+                // Jika regex utama gagal, coba gunakan Regex Backup
+                if (count === 0) {
+                    while ((match = regexBackup.exec(htmlSource)) !== null && count < 5) {
+                        const itemId = match[1];
+                        const shopId = match[2];
+                        const productName = match[3];
+                        
+                        if (!itemsFound.includes(itemId)) {
+                            itemsFound.push(itemId);
+                            htmlCards += buatTemplateCard(shopId, itemId, productName);
+                            count++;
+                        }
+                    }
+                }
+
+                // Render ke HTML
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            Struktur HTML berubah. Harap sesuaikan pola ekstraksi data atau periksa kembali kata kunci pencarian.
+                        </div>
                     `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // Fungsi pembantu untuk generate komponen card agar kode lebih rapi
+            function buatTemplateCard(shopId, itemId, productName) {
+                const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+                return `
+                    <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
+                                <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                    ★ 4.5+
+                                </span>
+                            </div>
+                            <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>Lihat Toko & Detail</span>
+                            <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </a>
+                `;
+            }
+            // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK (DI-UPDATE AGAR LEBIH AKURAT)
+            function parseDanTampilkanProduk(htmlSource) {
+                shopeeProductList.innerHTML = "";
+                
+                // Regex baru yang lebih fleksibel mencari itemid dan shopid baik berdekatan maupun terpisah dalam manifest string Shopee
+                const regexItem = /itemid["\s:]+(\d+).*?shopid["\s:]+(\d+).*?name["\s:]+"([^"]+)"/gi;
+                
+                // Backup Regex jika struktur di atas meleset (mencari model id universal)
+                const regexBackup = /{"itemid":\s*(\d+),\s*"shopid":\s*(\d+)[^}]+"name":\s*"([^"]+)"/g;
+                
+                let match;
+                let count = 0;
+                let htmlCards = "";
+                let itemsFound = [];
+
+                // Coba gunakan Regex Utama terlebih dahulu
+                while ((match = regexItem.exec(htmlSource)) !== null && count < 5) {
+                    const itemId = match[1];
+                    const shopId = match[2];
+                    const productName = match[3].replace(/\\u[\dA-F]{4}/gi, match => String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16))); // Decode unicode jika ada
+                    
+                    // Hindari duplikasi id produk yang sama
+                    if (!itemsFound.includes(itemId)) {
+                        itemsFound.push(itemId);
+                        htmlCards += buatTemplateCard(shopId, itemId, productName);
+                        count++;
+                    }
+                }
+
+                // Jika regex utama gagal, coba gunakan Regex Backup
+                if (count === 0) {
+                    while ((match = regexBackup.exec(htmlSource)) !== null && count < 5) {
+                        const itemId = match[1];
+                        const shopId = match[2];
+                        const productName = match[3];
+                        
+                        if (!itemsFound.includes(itemId)) {
+                            itemsFound.push(itemId);
+                            htmlCards += buatTemplateCard(shopId, itemId, productName);
+                            count++;
+                        }
+                    }
+                }
+
+                // Render ke HTML
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            Struktur HTML berubah. Harap sesuaikan pola ekstraksi data atau periksa kembali kata kunci pencarian.
+                        </div>
+                    `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // Fungsi pembantu untuk generate komponen card agar kode lebih rapi
+            function buatTemplateCard(shopId, itemId, productName) {
+                const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+                return `
+                    <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
+                                <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                    ★ 4.5+
+                                </span>
+                            </div>
+                            <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>Lihat Toko & Detail</span>
+                            <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </a>
+                `;
+            }
+
                     count++;
                 }
 
