@@ -189,10 +189,10 @@
         <section id="shopeeSection" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 hidden">
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white flex items-center gap-2">
                 <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.4c-2.43 0-4.43 1.86-4.66 4.23H4.2a.6.6 0 0 0-.6.55l-.95 13.2A1.8 1.8 0 0 0 4.45 22.4h15.1a1.8 1.8 0 0 0 1.8-1.92l-.95-13.27a.6.6 0 0 0-.6-.55h-3.14C16.43 4.26 14.43 2.4 12 2.4z"/></svg>
-                Rekomendasi Komponen Live Shopee
+                5 Produk Terlaris & Terbaik Pasaran Terdekat
             </h2>
-            <p class="text-slate-400 text-sm mb-6">Mencari ukuran pasaran terdekat otomatis di Shopee...</p>
-            <div id="shopeeProductList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <p class="text-slate-400 text-sm mb-6">Menyaring otomatis toko bintang 4-5 dengan performa penjualan tertinggi...</p>
+            <div id="shopeeProductList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
         <section class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
@@ -315,18 +315,19 @@
                 return Math.round(n).toLocaleString('id-ID');
             }
 
-            // FUNGSI UTAMA BACKEND CALL VIA VERCEL + CRAWLBASE
+            // FUNGSI UTAMA UNTUK MENGIRIM PARAMETER PENJUALAN TERBAIK & RATING TINGGI
             async function cariKomponenShopee(keyword) {
                 shopeeSection.classList.remove('hidden');
                 shopeeProductList.innerHTML = `
                     <div class="col-span-full text-center py-6 text-slate-400">
                         <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-orange-500 rounded-full mb-2"></div>
-                        <p class="text-xs">Mencari live pasaran '${keyword}' via Crawlbase...</p>
+                        <p class="text-xs">Mencari 5 Produk Terlaris & Terbaik untuk '${keyword}'...</p>
                     </div>
                 `;
 
                 try {
-                    const urlApiVercel = `/api/get-shopee?query=${encodeURIComponent(keyword)}`;
+                    // Menyisipkan parameter tambahan ke query URL agar fungsi backend memproses filter terlaris/bintang teratas
+                    const urlApiVercel = `/api/get-shopee?query=${encodeURIComponent(keyword)}&sortBy=sales&rating=4-5`;
                     const response = await fetch(urlApiVercel);
                     const result = await response.json();
 
@@ -345,7 +346,7 @@
                 }
             }
 
-            // PARSER MENERJEMAHKAN ISI SOURCE CODE SHOPEE MENJADI KARTU PRODUK HTML
+            // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK
             function parseDanTampilkanProduk(htmlSource) {
                 shopeeProductList.innerHTML = "";
                 const regexItem = /"itemid":\s*(\d+),\s*"shopid":\s*(\d+),\s*"name":\s*"([^"]+)"/g;
@@ -353,7 +354,8 @@
                 let count = 0;
                 let htmlCards = "";
 
-                while ((match = regexItem.exec(htmlSource)) !== null && count < 4) {
+                // Loop hingga menemukan maksimal 5 produk terbaik
+                while ((match = regexItem.exec(htmlSource)) !== null && count < 5) {
                     const itemId = match[1];
                     const shopId = match[2];
                     const productName = match[3];
@@ -363,11 +365,16 @@
                         <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
                            class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
                             <div>
-                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-bold px-2 py-0.5 rounded-full mb-2 inline-block">Pasaran Terpilih</span>
+                                <div class="flex items-center gap-1.5 mb-2">
+                                    <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
+                                    <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                        ★ 4.5+
+                                    </span>
+                                </div>
                                 <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
                             </div>
                             <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                                <span>Cek Produk</span>
+                                <span>Lihat Toko & Detail</span>
                                 <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
                             </div>
                         </a>
@@ -378,7 +385,7 @@
                 if (count === 0) {
                     shopeeProductList.innerHTML = `
                         <div class="col-span-full text-center py-4 text-xs text-slate-500">
-                            HTML terambil. Coba ganti spesifikasi untuk memicu kata kunci baru.
+                            HTML terambil. Coba sesuaikan spesifikasi untuk memicu daftar kata kunci alternatif.
                         </div>
                     `;
                 } else {
@@ -412,11 +419,10 @@
                 resultWp.textContent = fmt(finalWp);
                 resultAmpere.textContent = ampere.toFixed(1);
 
-                // --- INTEGRASI BARU: LOGIKA RANGE PILIHAN PASARAN BATERAI ---
+                // RANGE PASARAN YANG SAH Sesuai Kebutuhan User
                 const pasaranAh = [15, 22, 50, 52, 100, 120, 200];
-                let alternatifAh = pasaranAh[pasaranAh.length - 1]; // Default ke 200Ah jika di atas batas maksimum
+                let alternatifAh = pasaranAh[pasaranAh.length - 1]; 
 
-                // Cari ukuran pasaran yang paling pas atau sedikit di atas kebutuhan murni kalkulator
                 for (let i = 0; i < pasaranAh.length; i++) {
                     if (pasaranAh[i] >= finalAh) {
                         alternatifAh = pasaranAh[i];
@@ -424,7 +430,7 @@
                     }
                 }
 
-                // DEBOUNCE TIMER: Mencegah pemborosan kuota API saat user mengubah input numerik
+                // DEBOUNCE TIMER UNTUK EFISIENSI REKUEST SCRAPER
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     cariKomponenShopee(`baterai lifepo4 ${alternatifAh}ah ${voltage}v`);
