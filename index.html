@@ -40,6 +40,13 @@
             font-size: 2rem;
             font-weight: 900;
         }
+        .shopee-product-card {
+            transition: all 0.3s ease;
+        }
+        .shopee-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
@@ -51,6 +58,7 @@
 
     <div class="relative container mx-auto px-4 py-6 md:py-10 max-w-5xl">
 
+        <!-- HEADER: Title + Social side-by-side -->
         <header class="flex flex-row items-center justify-between gap-3 sm:gap-6 mb-8 md:mb-12">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -65,13 +73,15 @@
             </div>
 
             <nav class="flex items-center gap-2 sm:gap-3" aria-label="Sosial Media">
+                <!-- YouTube -->
                 <a href="https://youtube.com/@deddybaterai?si=mtB6g5QuR5iXd-g8" target="_blank" rel="noopener noreferrer"
                    aria-label="YouTube"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500 hover:bg-red-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-hover:text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 alert.502-5.814a3.016 3.016 0 0 0 2.122-2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                 </a>
+                <!-- TikTok -->
                 <a href="https://tiktok.com/@deddybaterai" target="_blank" rel="noopener noreferrer"
                    aria-label="TikTok"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:bg-cyan-400/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
@@ -79,6 +89,7 @@
                         <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.93a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.36z"/>
                     </svg>
                 </a>
+                <!-- Shopee -->
                 <a href="https://id.shp.ee/9cw63kdy?smtt=0.0.9" target="_blank" rel="noopener noreferrer"
                    aria-label="Shopee"
                    class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-orange-500 hover:bg-orange-500/10 flex items-center justify-center transition-all duration-300 hover:scale-110">
@@ -89,6 +100,7 @@
             </nav>
         </header>
 
+        <!-- HERO LIVE BADGE -->
         <div class="flex justify-center mb-6">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold">
                 <span class="pulse-dot"></span>
@@ -96,12 +108,14 @@
             </div>
         </div>
 
+        <!-- CALCULATOR -->
         <main class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 card-glow">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
                 Kalkulator Kebutuhan PLTS
             </h2>
             <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Masukkan data, hasil tampil otomatis</p>
 
+            <!-- INPUTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div class="flex flex-col">
                     <label for="wattInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Daya Output (Watt)</label>
@@ -131,7 +145,9 @@
                 </div>
             </div>
 
+            <!-- RESULTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Baterai (Ah) -->
                 <div class="relative bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
@@ -148,6 +164,311 @@
                     </p>
                     <p class="text-xs text-slate-400 mt-3">Asumsi DoD 80%</p>
                 </div>
+
+                <!-- Panel Surya (Wp) -->
+                <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-emerald-300 uppercase tracking-wider">Panel Surya</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
+                </div>
+
+                <!-- Arus (Ampere) -->
+                <div class="relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wider">Arus Maksimum</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultAmpere">0</span><span class="text-2xl sm:text-3xl text-amber-400 ml-1">A</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">Arus beban inverter</p>
+                </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
+                <span class="font-semibold text-slate-300">Catatan:</span> Hasil adalah estimasi. Faktor efisiensi inverter, cuaca, dan profil penggunaan dapat mempengaruhi hasil aktual.
+            </p>
+        </main>
+
+        <!-- TOPOLOGI -->
+        <section class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                Panduan Topologi Pemasangan
+            </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Urutan koneksi sistem PLTS Off-Grid</p>
+
+            <div class="flex flex-col md:flex-row md:items-stretch md:justify-between gap-3">
+                <!-- Step 1 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 1</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Panel Surya</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <path d="M8 10h8M8 14h8M10 8v8M14 8v8"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 2</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">MPPT/SCC</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="18" height="10" rx="2"/>
+                            <path d="M22 11v2"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 3</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Baterai LiFePO4</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-amber-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12h4l3-9 4 18 3-9h4"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-amber-400 font-bold mb-1">LANGKAH 4</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Inverter</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12L12 3l9 9M5 10v10h14V10"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 5</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Beban AC</p>
+                </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="mt-8 p-5 sm:p-6 bg-red-500/10 border-l-4 border-red-500 rounded-xl">
+                <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-red-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 0 0-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
+                    </svg>
+                    <div>
+                        <p class="font-extrabold text-lg sm:text-xl text-red-300 mb-1">PENTING!</p>
+                        <p class="text-sm sm:text-base text-red-100/90 leading-relaxed">
+                            Selalu hubungkan <span class="font-bold">Baterai ke SCC</span> terlebih dahulu, baru kemudian <span class="font-bold">Panel Surya ke SCC</span>. Urutan terbalik dapat merusak Solar Charge Controller.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHOPEE RECOMMENDATION SECTION -->
+        <section id="shopeeSection" style="display: none;" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                🛒 Rekomendasi Produk Shopee
+            </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Produk baterai LiFePO4 sesuai kebutuhan Anda</p>
+
+            <div id="loadingIndicator" style="display: none;" class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span class="text-slate-400 font-medium">Mencari produk berkualitas...</span>
+            </div>
+
+            <div id="shopeeResults" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Results will populate here -->
+            </div>
+
+            <div id="shopeeNotFound" style="display: none;" class="text-center py-12">
+                <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+                <p class="text-slate-400 mb-4 text-lg font-medium">Produk tidak ditemukan</p>
+                <p class="text-slate-500 text-sm mb-6">Kunjungi toko resmi DEBATRE untuk pilihan lengkap baterai LiFePO4</p>
+                <a href="https://id.shp.ee/9cw63kdy?smtt=0.0.9" target="_blank" rel="noopener noreferrer" 
+                   class="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold rounded-xl transition-all hover:scale-105">
+                    Buka Toko Shopee DEBATRE →
+                </a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-6 text-slate-500 text-sm">
+            &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const wattInput = document.getElementById('wattInput');
+            const hoursInput = document.getElementById('hoursInput');
+            const voltageInput = document.getElementById('voltageInput');
+            const resultAh = document.getElementById('resultAh');
+            const resultWp = document.getElementById('resultWp');
+            const resultAmpere = document.getElementById('resultAmpere');
+            const shopeeSection = document.getElementById('shopeeSection');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const shopeeResults = document.getElementById('shopeeResults');
+            const shopeeNotFound = document.getElementById('shopeeNotFound');
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            let shopeeDebounceTimer = null;
+
+            function fmt(n) {
+                if (!isFinite(n)) return '0';
+                return Math.round(n).toLocaleString('id-ID');
+            }
+
+            function getRoundedAh(ah) {
+                const standards = [50, 100, 150, 200, 280, 400, 600];
+                return standards.reduce((closest, num) => 
+                    Math.abs(num - ah) < Math.abs(closest - ah) ? num : closest
+                );
+            }
+
+            function renderShopeeProducts(products) {
+                shopeeResults.innerHTML = '';
+                if (!products || products.length === 0) {
+                    shopeeNotFound.style.display = 'block';
+                    return;
+                }
+
+                shopeeNotFound.style.display = 'none';
+                products.slice(0, 6).forEach(product => {
+                    const card = document.createElement('a');
+                    card.href = product.link || 'https://id.shp.ee/9cw63kdy?smtt=0.0.9';
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.className = 'shopee-product-card bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500 flex flex-col';
+                    
+                    card.innerHTML = `
+                        <div class="aspect-square bg-slate-800 flex items-center justify-center overflow-hidden">
+                            ${product.image ? `<img src="${product.image}" alt="${product.name || 'Produk'}" class="w-full h-full object-cover" onerror="this.style.display='none'">` : ''}
+                            <div class="text-slate-600 text-sm font-medium">Baterai LiFePO4</div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <p class="text-sm font-600 text-slate-200 line-clamp-2 mb-2">${product.name || 'Produk Baterai'}</p>
+                            <p class="text-lg font-bold text-emerald-400 mb-auto">${product.price || 'Harga'}</p>
+                            <p class="text-xs text-slate-500 mt-2">${product.shop || 'Toko DEBATRE'}</p>
+                        </div>
+                    `;
+                    
+                    shopeeResults.appendChild(card);
+                });
+            }
+
+            function fetchShopeeRecommendation(ah, voltage) {
+                if (shopeeDebounceTimer) {
+                    clearTimeout(shopeeDebounceTimer);
+                }
+
+                shopeeDebounceTimer = setTimeout(() => {
+                    loadingIndicator.style.display = 'flex';
+                    shopeeResults.innerHTML = '';
+                    shopeeNotFound.style.display = 'none';
+
+                    const roundedAh = getRoundedAh(ah);
+                    const query = `baterai+lifepo4+${roundedAh}ah+${voltage}v`;
+                    const apiUrl = `/api/get-shopee?query=${encodeURIComponent(query)}`;
+
+                    fetch(apiUrl)
+                        .then(res => res.json())
+                        .then(data => {
+                            loadingIndicator.style.display = 'none';
+                            if (data && data.products && Array.isArray(data.products)) {
+                                renderShopeeProducts(data.products);
+                            } else {
+                                shopeeNotFound.style.display = 'block';
+                            }
+                        })
+                        .catch(err => {
+                            loadingIndicator.style.display = 'none';
+                            shopeeNotFound.style.display = 'block';
+                        });
+                }, 1500);
+            }
+
+            function calculate() {
+                const watt = parseFloat(wattInput.value);
+                const hours = parseFloat(hoursInput.value);
+                const voltage = parseFloat(voltageInput.value);
+
+                if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
+                    resultAh.textContent = '0';
+                    resultWp.textContent = '0';
+                    resultAmpere.textContent = '0';
+                    shopeeSection.style.display = 'none';
+                    return;
+                }
+
+                // Baterai (Ah) dengan DoD 80%
+                const ah = (watt * hours) / voltage / 0.8;
+                // Panel Surya (Wp), PSH 5 jam, faktor 1.25
+                const wp = (watt * hours * 1.25) / 5;
+                // Arus inverter (A)
+                const ampere = watt / voltage;
+
+                resultAh.textContent = fmt(Math.ceil(ah));
+                resultWp.textContent = fmt(Math.ceil(wp));
+                resultAmpere.textContent = ampere.toFixed(1);
+
+                // Show Shopee section and fetch recommendations
+                shopeeSection.style.display = 'block';
+                fetchShopeeRecommendation(Math.ceil(ah), voltage);
+            }
+
+            ['input', 'change'].forEach(ev => {
+                wattInput.addEventListener(ev, calculate);
+                hoursInput.addEventListener(ev, calculate);
+                voltageInput.addEventListener(ev, calculate);
+            });
+
+            calculate();
+        })();
+    </script>
+</body>
+</html>
 
                 <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
