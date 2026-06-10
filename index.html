@@ -395,9 +395,80 @@
 
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
+            let shopeeDebounceTimer = null;
+
             function fmt(n) {
                 if (!isFinite(n)) return '0';
                 return Math.round(n).toLocaleString('id-ID');
+            }
+
+            function getRoundedAh(ah) {
+                const standards = [50, 100, 150, 200, 280, 400, 600];
+                return standards.reduce((closest, num) => 
+                    Math.abs(num - ah) < Math.abs(closest - ah) ? num : closest
+                );
+            }
+
+            function renderShopeeProducts(products) {
+                shopeeResults.innerHTML = '';
+                if (!products || products.length === 0) {
+                    shopeeNotFound.style.display = 'block';
+                    return;
+                }
+
+                shopeeNotFound.style.display = 'none';
+                products.slice(0, 6).forEach(product => {
+                    const card = document.createElement('a');
+                    card.href = product.link || 'https://id.shp.ee/9cw63kdy?smtt=0.0.9';
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.className = 'shopee-product-card bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500 flex flex-col';
+                    
+                    card.innerHTML = `
+                        <div class="aspect-square bg-slate-800 flex items-center justify-center overflow-hidden">
+                            ${product.image ? `<img src="${product.image}" alt="${product.name || 'Produk'}" class="w-full h-full object-cover" onerror="this.style.display='none'">` : ''}
+                            <div class="text-slate-600 text-sm font-medium">Baterai LiFePO4</div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <p class="text-sm font-600 text-slate-200 line-clamp-2 mb-2">${product.name || 'Produk Baterai'}</p>
+                            <p class="text-lg font-bold text-emerald-400 mb-auto">${product.price || 'Harga'}</p>
+                            <p class="text-xs text-slate-500 mt-2">${product.shop || 'Toko DEBATRE'}</p>
+                        </div>
+                    `;
+                    
+                    shopeeResults.appendChild(card);
+                });
+            }
+
+            function fetchShopeeRecommendation(ah, voltage) {
+                if (shopeeDebounceTimer) {
+                    clearTimeout(shopeeDebounceTimer);
+                }
+
+                shopeeDebounceTimer = setTimeout(() => {
+                    loadingIndicator.style.display = 'flex';
+                    shopeeResults.innerHTML = '';
+                    shopeeNotFound.style.display = 'none';
+
+                    const roundedAh = getRoundedAh(ah);
+                    const query = `baterai+lifepo4+${roundedAh}ah+${voltage}v`;
+                    const apiUrl = `/api/get-shopee?query=${encodeURIComponent(query)}`;
+
+                    fetch(apiUrl)
+                        .then(res => res.json())
+                        .then(data => {
+                            loadingIndicator.style.display = 'none';
+                            if (data && data.products && Array.isArray(data.products)) {
+                                renderShopeeProducts(data.products);
+                            } else {
+                                shopeeNotFound.style.display = 'block';
+                            }
+                        })
+                        .catch(err => {
+                            loadingIndicator.style.display = 'none';
+                            shopeeNotFound.style.display = 'block';
+                        });
+                }, 1500);
             }
 
             function calculate() {
@@ -409,6 +480,7 @@
                     resultAh.textContent = '0';
                     resultWp.textContent = '0';
                     resultAmpere.textContent = '0';
+                    shopeeSection.style.display = 'none';
                     return;
                 }
 
@@ -422,6 +494,10 @@
                 resultAh.textContent = fmt(Math.ceil(ah));
                 resultWp.textContent = fmt(Math.ceil(wp));
                 resultAmpere.textContent = ampere.toFixed(1);
+
+                // Show Shopee section and fetch recommendations
+                shopeeSection.style.display = 'block';
+                fetchShopeeRecommendation(Math.ceil(ah), voltage);
             }
 
             ['input', 'change'].forEach(ev => {
@@ -433,5 +509,431 @@
             calculate();
         })();
     </script>
+</body>
+</html>
+
+                <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-emerald-300 uppercase tracking-wider">Panel Surya</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
+                </div>
+
+                <div class="relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wider">Arus Maksimum</h3>
+                    </div>
+                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
+                        <span id="resultAmpere">0</span><span class="text-2xl sm:text-3xl text-amber-400 ml-1">A</span>
+                    </p>
+                    <p class="text-xs text-slate-400 mt-3">Arus beban inverter</p>
+                </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
+                <span class="font-semibold text-slate-300">Catatan:</span> Hasil adalah estimasi. Faktor efisiensi inverter, cuaca, dan profil penggunaan dapat mempengaruhi hasil aktual.
+            </p>
+        </main>
+
+        <section id="shopeeSection" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8 hidden">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.4c-2.43 0-4.43 1.86-4.66 4.23H4.2a.6.6 0 0 0-.6.55l-.95 13.2A1.8 1.8 0 0 0 4.45 22.4h15.1a1.8 1.8 0 0 0 1.8-1.92l-.95-13.27a.6.6 0 0 0-.6-.55h-3.14C16.43 4.26 14.43 2.4 12 2.4z"/></svg>
+                Rekomendasi Produk
+            </h2>
+            <p class="text-slate-400 text-sm mb-6">Menampilkan produk terlaris dengan performa penjualan tertinggi dan rating toko bintang 4-5...</p>
+            <div id="shopeeProductList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <section class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                Panduan Topologi Pemasangan
+            </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Urutan koneksi sistem PLTS Off-Grid</p>
+
+            <div class="flex flex-col md:flex-row md:items-stretch md:justify-between gap-3">
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 1</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Panel Surya</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <path d="M8 10h8M8 14h8M10 8v8M14 8v8"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 2</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">MPPT/SCC</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="18" height="10" rx="2"/>
+                            <path d="M22 11v2"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 3</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Baterai LiFePO4</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-amber-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12h4l3-9 4 18 3-9h4"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-amber-400 font-bold mb-1">LANGKAH 4</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Inverter</p>
+                </div>
+
+                <div class="flex items-center justify-center arrow-flow">
+                    <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12L12 3l9 9M5 10v10h14V10"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 5</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Beban AC</p>
+                </div>
+            </div>
+
+            <div class="mt-8 p-5 sm:p-6 bg-red-500/10 border-l-4 border-red-500 rounded-xl">
+                <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-red-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 0 0-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
+                    </svg>
+                    <div>
+                        <p class="font-extrabold text-lg sm:text-xl text-red-300 mb-1">PENTING!</p>
+                        <p class="text-sm sm:text-base text-red-100/90 leading-relaxed">
+                            Selalu hubungkan <span class="font-bold">Baterai ke SCC</span> terlebih dahulu, baru kemudian <span class="font-bold">Panel Surya ke SCC</span>. Urutan terbalik dapat merusak Solar Charge Controller.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-6 text-slate-500 text-sm">
+            &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // ORIGINAL VARIABLE SELECTOR DO NOT EDIT
+            const wattInput = document.getElementById('wattInput');
+            const hoursInput = document.getElementById('hoursInput');
+            const voltageInput = document.getElementById('voltageInput');
+            const resultAh = document.getElementById('resultAh');
+            const resultWp = document.getElementById('resultWp');
+            const resultAmpere = document.getElementById('resultAmpere');
+            
+            // TAMBAHAN SELECTOR UNTUK BOT SCRAPER
+            const shopeeSection = document.getElementById('shopeeSection');
+            const shopeeProductList = document.getElementById('shopeeProductList');
+            
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            let searchTimeout;
+
+            function fmt(n) {
+                if (!isFinite(n)) return '0';
+                return Math.round(n).toLocaleString('id-ID');
+            }
+
+            // FUNGSI UTAMA UNTUK MENGIRIM PARAMETER PENJUALAN TERBAIK & RATING TINGGI
+            async function cariKomponenShopee(keyword) {
+                shopeeSection.classList.remove('hidden');
+                shopeeProductList.innerHTML = `
+                    <div class="col-span-full text-center py-6 text-slate-400">
+                        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-orange-500 rounded-full mb-2"></div>
+                        <p class="text-xs">Mencari 5 Produk Terlaris & Terbaik untuk '${keyword}'...</p>
+                    </div>
+                `;
+
+                try {
+                    // Menyisipkan parameter tambahan ke query URL agar fungsi backend memproses filter terlaris/bintang teratas
+                    const urlApiVercel = `/api/get-shopee?query=${encodeURIComponent(keyword)}&sortBy=sales&rating=4-5`;
+                    const response = await fetch(urlApiVercel);
+                    const result = await response.json();
+
+                    if (result.success && result.html) {
+                        parseDanTampilkanProduk(result.html);
+                    } else {
+                        throw new Error(result.error || "Gagal load data");
+                    }
+                } catch (error) {
+                    console.error("Error Scraper:", error);
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-red-400 bg-red-500/5 border border-red-500/20 rounded-xl">
+                            Gagal sinkronisasi data live Shopee. Silakan gunakan tautan official toko DEBATRE di atas.
+                        </div>
+                    `;
+                }
+            }
+
+                        // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK (DI-UPDATE AGAR LEBIH AKURAT)
+            function parseDanTampilkanProduk(htmlSource) {
+                shopeeProductList.innerHTML = "";
+                
+                // Regex baru yang lebih fleksibel mencari itemid dan shopid baik berdekatan maupun terpisah dalam manifest string Shopee
+                const regexItem = /itemid["\s:]+(\d+).*?shopid["\s:]+(\d+).*?name["\s:]+"([^"]+)"/gi;
+                
+                // Backup Regex jika struktur di atas meleset (mencari model id universal)
+                const regexBackup = /{"itemid":\s*(\d+),\s*"shopid":\s*(\d+)[^}]+"name":\s*"([^"]+)"/g;
+                
+                let match;
+                let count = 0;
+                let htmlCards = "";
+                let itemsFound = [];
+
+                // Coba gunakan Regex Utama terlebih dahulu
+                while ((match = regexItem.exec(htmlSource)) !== null && count < 5) {
+                    const itemId = match[1];
+                    const shopId = match[2];
+                    const productName = match[3].replace(/\\u[\dA-F]{4}/gi, match => String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16))); // Decode unicode jika ada
+                    
+                    // Hindari duplikasi id produk yang sama
+                    if (!itemsFound.includes(itemId)) {
+                        itemsFound.push(itemId);
+                        htmlCards += buatTemplateCard(shopId, itemId, productName);
+                        count++;
+                    }
+                }
+
+                // Jika regex utama gagal, coba gunakan Regex Backup
+                if (count === 0) {
+                    while ((match = regexBackup.exec(htmlSource)) !== null && count < 5) {
+                        const itemId = match[1];
+                        const shopId = match[2];
+                        const productName = match[3];
+                        
+                        if (!itemsFound.includes(itemId)) {
+                            itemsFound.push(itemId);
+                            htmlCards += buatTemplateCard(shopId, itemId, productName);
+                            count++;
+                        }
+                    }
+                }
+
+                // Render ke HTML
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            Struktur HTML berubah. Harap sesuaikan pola ekstraksi data atau periksa kembali kata kunci pencarian.
+                        </div>
+                    `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // Fungsi pembantu untuk generate komponen card agar kode lebih rapi
+            function buatTemplateCard(shopId, itemId, productName) {
+                const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+                return `
+                    <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
+                                <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                    ★ 4.5+
+                                </span>
+                            </div>
+                            <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>Lihat Toko & Detail</span>
+                            <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </a>
+                `;
+            }
+            // PARSER MENAMPILKAN MAKSIMAL 5 PRODUK TERBAIK (DI-UPDATE AGAR LEBIH AKURAT)
+            function parseDanTampilkanProduk(htmlSource) {
+                shopeeProductList.innerHTML = "";
+                
+                // Regex baru yang lebih fleksibel mencari itemid dan shopid baik berdekatan maupun terpisah dalam manifest string Shopee
+                const regexItem = /itemid["\s:]+(\d+).*?shopid["\s:]+(\d+).*?name["\s:]+"([^"]+)"/gi;
+                
+                // Backup Regex jika struktur di atas meleset (mencari model id universal)
+                const regexBackup = /{"itemid":\s*(\d+),\s*"shopid":\s*(\d+)[^}]+"name":\s*"([^"]+)"/g;
+                
+                let match;
+                let count = 0;
+                let htmlCards = "";
+                let itemsFound = [];
+
+                // Coba gunakan Regex Utama terlebih dahulu
+                while ((match = regexItem.exec(htmlSource)) !== null && count < 5) {
+                    const itemId = match[1];
+                    const shopId = match[2];
+                    const productName = match[3].replace(/\\u[\dA-F]{4}/gi, match => String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16))); // Decode unicode jika ada
+                    
+                    // Hindari duplikasi id produk yang sama
+                    if (!itemsFound.includes(itemId)) {
+                        itemsFound.push(itemId);
+                        htmlCards += buatTemplateCard(shopId, itemId, productName);
+                        count++;
+                    }
+                }
+
+                // Jika regex utama gagal, coba gunakan Regex Backup
+                if (count === 0) {
+                    while ((match = regexBackup.exec(htmlSource)) !== null && count < 5) {
+                        const itemId = match[1];
+                        const shopId = match[2];
+                        const productName = match[3];
+                        
+                        if (!itemsFound.includes(itemId)) {
+                            itemsFound.push(itemId);
+                            htmlCards += buatTemplateCard(shopId, itemId, productName);
+                            count++;
+                        }
+                    }
+                }
+
+                // Render ke HTML
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            Struktur HTML berubah. Harap sesuaikan pola ekstraksi data atau periksa kembali kata kunci pencarian.
+                        </div>
+                    `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // Fungsi pembantu untuk generate komponen card agar kode lebih rapi
+            function buatTemplateCard(shopId, itemId, productName) {
+                const productUrl = `https://shopee.co.id/product/${shopId}/${itemId}`;
+                return `
+                    <a href="${productUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="p-4 bg-slate-950 border border-slate-800 rounded-xl hover:border-orange-500/50 transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <span class="text-[9px] bg-orange-500/10 text-orange-400 font-extrabold px-2 py-0.5 rounded-full">Top Seller</span>
+                                <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                    ★ 4.5+
+                                </span>
+                            </div>
+                            <h4 class="font-semibold text-slate-200 text-xs line-clamp-2 group-hover:text-orange-400 transition-colors">${productName}</h4>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>Lihat Toko & Detail</span>
+                            <span class="text-orange-500 group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </a>
+                `;
+            }
+
+                    count++;
+                }
+
+                if (count === 0) {
+                    shopeeProductList.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-xs text-slate-500">
+                            HTML terambil. Coba sesuaikan spesifikasi untuk memicu daftar kata kunci alternatif.
+                        </div>
+                    `;
+                } else {
+                    shopeeProductList.innerHTML = htmlCards;
+                }
+            }
+
+            // ORIGINAL LOGIC CALCULATION ROUTINE DO NOT EDIT
+            function calculate() {
+                const watt = parseFloat(wattInput.value);
+                const hours = parseFloat(hoursInput.value);
+                const voltage = parseFloat(voltageInput.value);
+
+                if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
+                    resultAh.textContent = '0';
+                    resultWp.textContent = '0';
+                    resultAmpere.textContent = '0';
+                    shopeeSection.classList.add('hidden');
+                    return;
+                }
+
+                // ORIGINAL FORMULAS DO NOT EDIT
+                const ah = (watt * hours) / voltage / 0.8;
+                const wp = (watt * hours * 1.25) / 5;
+                const ampere = watt / voltage;
+
+                const finalAh = Math.ceil(ah);
+                const finalWp = Math.ceil(wp);
+
+                resultAh.textContent = fmt(finalAh);
+                resultWp.textContent = fmt(finalWp);
+                resultAmpere.textContent = ampere.toFixed(1);
+
+                // RANGE PASARAN YANG SAH Sesuai Kebutuhan User
+                const pasaranAh = [15, 22, 50, 52, 100, 120, 200];
+                let alternatifAh = pasaranAh[pasaranAh.length - 1]; 
+
+                for (let i = 0; i < pasaranAh.length; i++) {
+                    if (pasaranAh[i] >= finalAh) {
+                        alternatifAh = pasaranAh[i];
+                        break;
+                    }
+                }
+
+                // DEBOUNCE TIMER UNTUK EFISIENSI REKUEST SCRAPER
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    cariKomponenShopee(`baterai lifepo4 ${alternatifAh}ah ${voltage}v`);
+                }, 1500);
+            }
+
+            // ORIGINAL EVENT BINDING DO NOT EDIT
+            ['input', 'change'].forEach(ev => {
+                wattInput.addEventListener(ev, calculate);
+                hoursInput.addEventListener(ev, calculate);
+                voltageInput.addEventListener(ev, calculate);
+            });
+
+            calculate();
+        })();
+    </script>
+    <script src="//code.tidio.co/picbq5qvj6qp9naxhybyrdhbnr6sdx5g.js" async></script>
 </body>
 </html>
