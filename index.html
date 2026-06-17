@@ -145,6 +145,51 @@
                 </div>
             </div>
 
+            <!-- ADVANCED TOGGLE -->
+            <div class="mb-8 p-4 bg-slate-950/50 border border-slate-800 rounded-xl">
+                <button id="advancedToggle" class="flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m0 0h6M6 12a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                    <span id="advancedToggleText">Tampilkan Opsi Advanced</span>
+                </button>
+
+                <!-- ADVANCED OPTIONS (hidden by default) -->
+                <div id="advancedOptions" class="hidden mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Inverter Efficiency -->
+                    <div class="flex flex-col">
+                        <label for="inverterInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Efisiensi Inverter</label>
+                        <div class="relative">
+                            <select id="inverterInput"
+                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
+                                <option value="0.80">Low-end 80%</option>
+                                <option value="0.85" selected>Standard 85%</option>
+                                <option value="0.90">High-end 90%</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weather/Season Conditions -->
+                    <div class="flex flex-col">
+                        <label for="pshInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Kondisi Cuaca/Musim</label>
+                        <div class="relative">
+                            <select id="pshInput"
+                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
+                                <option value="5">Cerah (5 jam)</option>
+                                <option value="4">Berawan (4 jam)</option>
+                                <option value="3">Hujan (3 jam)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- RESULTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Baterai (Ah) -->
@@ -179,7 +224,7 @@
                     <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
                         <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
                     </p>
-                    <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
+                    <p class="text-xs text-slate-400 mt-3">PSH <span id="pshNote">5 jam</span>, faktor 1.25</p>
                 </div>
 
                 <!-- Arus (Ampere) -->
@@ -391,12 +436,28 @@
         const wattInput = document.getElementById('wattInput');
         const hoursInput = document.getElementById('hoursInput');
         const voltageInput = document.getElementById('voltageInput');
+        const inverterInput = document.getElementById('inverterInput');
+        const pshInput = document.getElementById('pshInput');
+        const advancedToggle = document.getElementById('advancedToggle');
+        const advancedOptions = document.getElementById('advancedOptions');
+        const advancedToggleText = document.getElementById('advancedToggleText');
         const resultAh = document.getElementById('resultAh');
         const resultWp = document.getElementById('resultWp');
         const resultAmpere = document.getElementById('resultAmpere');
+        const pshNote = document.getElementById('pshNote');
         const dynamicAlert = document.getElementById('dynamicAlert');
 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Toggle Advanced Options
+        advancedToggle.addEventListener('click', function() {
+            advancedOptions.classList.toggle('hidden');
+            if (advancedOptions.classList.contains('hidden')) {
+                advancedToggleText.textContent = 'Tampilkan Opsi Advanced';
+            } else {
+                advancedToggleText.textContent = 'Sembunyikan Opsi Advanced';
+            }
+        });
 
         function fmt(n) {
             if (!isFinite(n)) return '0';
@@ -407,6 +468,12 @@
             const watt = parseFloat(wattInput.value);
             const hours = parseFloat(hoursInput.value);
             const voltage = parseFloat(voltageInput.value);
+            const inverterEfficiency = parseFloat(inverterInput.value);
+            const psh = parseFloat(pshInput.value);
+
+            // Update PSH note
+            const pshLabels = { '5': '5 jam', '4': '4 jam', '3': '3 jam' };
+            pshNote.textContent = pshLabels[psh] || '5 jam';
 
             if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
                 resultAh.textContent = '0';
@@ -416,17 +483,17 @@
                 return;
             }
 
-            // 1. Total Energi AC harian ditambah Faktor Efisiensi Inverter (85%)
-            const totalWhWithInverterLoss = (watt * hours) / 0.85;
+            // 1. Total Energi AC harian ditambah Faktor Efisiensi Inverter (dari advanced option)
+            const totalWhWithInverterLoss = (watt * hours) / inverterEfficiency;
 
             // 2. Kapasitas Baterai (Ah) dengan LiFePO4 DoD 80%
             const ah = totalWhWithInverterLoss / (voltage * 0.8);
 
-            // 3. Panel Surya (Wp) dengan PSH 5 jam dan Faktor Pengali 1.25
-            const wp = (totalWhWithInverterLoss * 1.25) / 5;
+            // 3. Panel Surya (Wp) dengan PSH (dari advanced option) dan Faktor Pengali 1.25
+            const wp = (totalWhWithInverterLoss * 1.25) / psh;
 
             // 4. Arus Beban DC Aktual ke Inverter (A) termasuk losses
-            const loadAmpere = watt / 0.85 / voltage;
+            const loadAmpere = watt / inverterEfficiency / voltage;
 
             // 5. Arus Pengisian dari Panel Surya ke Controller / SCC (A)
             const chargeAmpere = wp / voltage;
@@ -447,7 +514,7 @@
                 
                 const sccCount60A = Math.ceil(chargeAmpere / 60);
                 const alternativeChargeAmpere = wp / 48;
-                const alternativeLoadAmpere = watt / 0.85 / 48;
+                const alternativeLoadAmpere = watt / inverterEfficiency / 48;
 
                 alertHtml = `
                     <div class="flex items-start gap-3">
@@ -509,6 +576,8 @@
             wattInput.addEventListener(ev, calculate);
             hoursInput.addEventListener(ev, calculate);
             voltageInput.addEventListener(ev, calculate);
+            inverterInput.addEventListener(ev, calculate);
+            pshInput.addEventListener(ev, calculate);
         });
 
         calculate();
