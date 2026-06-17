@@ -2,6 +2,7 @@
   "name": "DEBATRE Kalkulator PLTS & Baterai LiFePO4",
   "short_name": "DEBATRE",
   "description": "Kalkulator PLTS dan Baterai LiFePO4 real-time untuk sistem off-grid. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah. Bekerja 100% offline tanpa internet.",
+  "id": "/?source=pwa",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
@@ -35,6 +36,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Kalkulator DEBATRE Mobile"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Kalkulator DEBATRE Desktop"
     }
   ],
   "categories": ["productivity", "utilities"]
