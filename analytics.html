@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="DEBATRE Analytics Dashboard - Real-time visitor analytics dan engagement metrics">
+    <title>DEBATRE - Analytics Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%);
+            color: #e2e8f0;
+        }
+        .card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: #64748b;
+        }
+        .spinner {
+            border: 3px solid rgba(30, 41, 59, 0.5);
+            border-top: 3px solid #06b6d4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .session-row {
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+            padding: 1rem 0;
+            transition: background-color 0.3s;
+        }
+        .session-row:hover {
+            background-color: rgba(6, 182, 212, 0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .badge-mobile {
+            background-color: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+        }
+        .badge-tablet {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #bfdbfe;
+        }
+        .badge-desktop {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #bbf7d0;
+        }
+        .time-filter button {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(30, 41, 59, 0.5);
+            border-radius: 0.5rem;
+            background: transparent;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .time-filter button.active {
+            background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+            border-color: #06b6d4;
+            color: white;
+        }
+        .time-filter button:hover:not(.active) {
+            border-color: #06b6d4;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-4xl font-black text-white mb-2">Analytics Dashboard</h1>
+                    <p class="text-slate-400">Real-time visitor analytics dan engagement metrics</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="/" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-white text-sm font-semibold">
+                        ← Kembali ke Kalkulator
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Filter -->
+        <div class="mb-8 flex gap-2 time-filter">
+            <button class="active" data-hours="12">12 Jam Terakhir</button>
+            <button data-hours="24">24 Jam Terakhir</button>
+            <button data-hours="168">7 Hari Terakhir</button>
+        </div>
+
+        <!-- Summary Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="card metric-card rounded-xl p-6">
+                <p class="text-slate-400 text-sm font-semibold mb-2">Total Sessions</p>
+                <div class="stat-number" id="totalSessions">-</div>
+                <p class="text-slate-500 text-xs mt-2">unique visitors</p>
+            </div>
+
+            <div class="card metric-card rounded-xl p-6">
+                <p class="text-slate-400 text-sm font-semibold mb-2">Avg Session Duration</p>
+                <div class="stat-number" id="avgDuration">-</div>
+                <p class="text-slate-500 text-xs mt-2">seconds</p>
+            </div>
+
+            <div class="card metric-card rounded-xl p-6">
+                <p class="text-slate-400 text-sm font-semibold mb-2">Total Calculations</p>
+                <div class="stat-number" id="totalCalculations">-</div>
+                <p class="text-slate-500 text-xs mt-2">performed</p>
+            </div>
+
+            <div class="card metric-card rounded-xl p-6">
+                <p class="text-slate-400 text-sm font-semibold mb-2">Total Events</p>
+                <div class="stat-number" id="totalEvents">-</div>
+                <p class="text-slate-500 text-xs mt-2">tracked</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Hourly Trends -->
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-bold text-white mb-4">Hourly Trends</h2>
+                <div class="chart-container">
+                    <div class="loading" id="trendsLoading">
+                        <div class="spinner"></div>
+                    </div>
+                    <canvas id="trendsChart" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Device Distribution -->
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-bold text-white mb-4">Device Distribution</h2>
+                <div class="chart-container">
+                    <div class="loading" id="deviceLoading">
+                        <div class="spinner"></div>
+                    </div>
+                    <canvas id="deviceChart" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Browser Distribution -->
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-bold text-white mb-4">Browser Distribution</h2>
+                <div class="chart-container">
+                    <div class="loading" id="browserLoading">
+                        <div class="spinner"></div>
+                    </div>
+                    <canvas id="browserChart" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <!-- OS Distribution -->
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-bold text-white mb-4">Operating System</h2>
+                <div class="chart-container">
+                    <div class="loading" id="osLoading">
+                        <div class="spinner"></div>
+                    </div>
+                    <canvas id="osChart" style="display: none;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Calculations -->
+        <div class="card rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-bold text-white mb-4">Top Calculations</h2>
+            <div id="calculationsLoading" class="loading">
+                <div class="spinner"></div>
+            </div>
+            <div id="calculationsContent" style="display: none;">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-700">
+                                <th class="text-left py-3 px-4 font-semibold text-slate-300">Calculation Type</th>
+                                <th class="text-center py-3 px-4 font-semibold text-slate-300">Count</th>
+                                <th class="text-center py-3 px-4 font-semibold text-slate-300">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calculationsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Sessions -->
+        <div class="card rounded-xl p-6">
+            <h2 class="text-xl font-bold text-white mb-4">Recent Sessions</h2>
+            <div id="sessionsLoading" class="loading">
+                <div class="spinner"></div>
+            </div>
+            <div id="sessionsContent" style="display: none;">
+                <div id="sessionsList"></div>
+                <p class="text-slate-500 text-sm text-center py-4">Klik pada session untuk melihat detail</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Detail Modal -->
+    <div id="sessionModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="card rounded-xl w-full max-h-[90vh] overflow-y-auto max-w-2xl">
+            <div class="sticky top-0 card p-6 border-b border-slate-700 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white">Session Detail</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div id="modalContent" class="p-6"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/analytics';
+        let currentHours = 12;
+        let charts = {};
+
+        // Time filter buttons
+        document.querySelectorAll('.time-filter button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.time-filter button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentHours = parseInt(this.dataset.hours);
+                loadAllData();
+            });
+        });
+
+        /**
+         * Fetch data from analytics API
+         */
+        async function fetchAnalyticsData(type, params = {}) {
+            const url = new URL(`${API_BASE}/data`, window.location.origin);
+            url.searchParams.append('type', type);
+            url.searchParams.append('hours', currentHours);
+            
+            Object.entries(params).forEach(([key, value]) => {
+                url.searchParams.append(key, value);
+            });
+
+            try {
+                const response = await fetch(url);
+                const json = await response.json();
+                return json.success ? json.data : null;
+            } catch (error) {
+                console.error('[analytics-dashboard] Fetch error:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Format duration in seconds to readable string
+         */
+        function formatDuration(seconds) {
+            if (!seconds) return '0s';
+            if (seconds < 60) return `${seconds}s`;
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+            return `${Math.floor(seconds / 3600)}h`;
+        }
+
+        /**
+         * Load summary metrics
+         */
+        async function loadSummary() {
+            const data = await fetchAnalyticsData('summary');
+            if (!data) return;
+
+            document.getElementById('totalSessions').textContent = data.total_sessions || 0;
+            document.getElementById('avgDuration').textContent = data.avg_session_duration || 0;
+            document.getElementById('totalCalculations').textContent = data.total_calculations || 0;
+            document.getElementById('totalEvents').textContent = data.total_events || 0;
+        }
+
+        /**
+         * Load and render trends chart
+         */
+        async function loadTrends() {
+            const data = await fetchAnalyticsData('trends');
+            if (!data) return;
+
+            const loading = document.getElementById('trendsLoading');
+            const canvas = document.getElementById('trendsChart');
+
+            loading.style.display = 'none';
+            canvas.style.display = 'block';
+
+            // Reverse to show oldest first
+            const reversedData = data.reverse();
+
+            if (charts.trends) charts.trends.destroy();
+
+            charts.trends = new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: reversedData.map(d => new Date(d.hour).toLocaleTimeString()),
+                    datasets: [
+                        {
+                            label: 'Sessions',
+                            data: reversedData.map(d => d.sessions),
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Calculations',
+                            data: reversedData.map(d => d.calculations),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(30, 41, 59, 0.2)' } },
+                        x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(30, 41, 59, 0.2)' } }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Load and render device distribution chart
+         */
+        async function loadDeviceChart() {
+            const data = await fetchAnalyticsData('devices');
+            if (!data || data.length === 0) return;
+
+            const loading = document.getElementById('deviceLoading');
+            const canvas = document.getElementById('deviceChart');
+
+            loading.style.display = 'none';
+            canvas.style.display = 'block';
+
+            if (charts.device) charts.device.destroy();
+
+            charts.device = new Chart(canvas, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d.device_type?.charAt(0).toUpperCase() + d.device_type?.slice(1) || 'Unknown'),
+                    datasets: [{
+                        data: data.map(d => d.count),
+                        backgroundColor: ['#06b6d4', '#10b981', '#f59e0b'],
+                        borderColor: 'rgba(15, 23, 42, 0.7)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Load and render browser distribution chart
+         */
+        async function loadBrowserChart() {
+            const data = await fetchAnalyticsData('browsers');
+            if (!data || data.length === 0) return;
+
+            const loading = document.getElementById('browserLoading');
+            const canvas = document.getElementById('browserChart');
+
+            loading.style.display = 'none';
+            canvas.style.display = 'block';
+
+            if (charts.browser) charts.browser.destroy();
+
+            charts.browser = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.browser || 'Unknown'),
+                    datasets: [{
+                        label: 'Users',
+                        data: data.map(d => d.count),
+                        backgroundColor: '#06b6d4',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(30, 41, 59, 0.2)' } },
+                        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(30, 41, 59, 0.2)' } }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Load and render OS distribution chart
+         */
+        async function loadOSChart() {
+            const data = await fetchAnalyticsData('os');
+            if (!data || data.length === 0) return;
+
+            const loading = document.getElementById('osLoading');
+            const canvas = document.getElementById('osChart');
+
+            loading.style.display = 'none';
+            canvas.style.display = 'block';
+
+            if (charts.os) charts.os.destroy();
+
+            charts.os = new Chart(canvas, {
+                type: 'pie',
+                data: {
+                    labels: data.map(d => d.os || 'Unknown'),
+                    datasets: [{
+                        data: data.map(d => d.count),
+                        backgroundColor: ['#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                        borderColor: 'rgba(15, 23, 42, 0.7)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Load and render calculations table
+         */
+        async function loadCalculations() {
+            const data = await fetchAnalyticsData('calculations');
+            if (!data || data.length === 0) return;
+
+            const loading = document.getElementById('calculationsLoading');
+            const content = document.getElementById('calculationsContent');
+            const tbody = document.getElementById('calculationsTable');
+
+            loading.style.display = 'none';
+            content.style.display = 'block';
+
+            tbody.innerHTML = data.map(d => `
+                <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+                    <td class="py-3 px-4">${d.calculation_type || 'Unknown'}</td>
+                    <td class="text-center py-3 px-4 font-semibold">${d.count}</td>
+                    <td class="text-center py-3 px-4 text-cyan-400">${d.percentage}%</td>
+                </tr>
+            `).join('');
+        }
+
+        /**
+         * Load and render recent sessions
+         */
+        async function loadSessions() {
+            const data = await fetchAnalyticsData('sessions');
+            if (!data || data.length === 0) return;
+
+            const loading = document.getElementById('sessionsLoading');
+            const content = document.getElementById('sessionsContent');
+            const list = document.getElementById('sessionsList');
+
+            loading.style.display = 'none';
+            content.style.display = 'block';
+
+            list.innerHTML = data.map(session => {
+                const badgeClass = {
+                    mobile: 'badge-mobile',
+                    tablet: 'badge-tablet',
+                    desktop: 'badge-desktop'
+                }[session.device_type] || 'badge-desktop';
+
+                return `
+                    <div class="session-row cursor-pointer" onclick="showSessionDetails('${session.session_id}')">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                            <div class="flex-1">
+                                <div class="flex gap-2 mb-1 flex-wrap">
+                                    <span class="badge ${badgeClass}">${session.device_type?.charAt(0).toUpperCase() + session.device_type?.slice(1)}</span>
+                                    <span class="text-xs text-slate-400">${session.os}</span>
+                                    <span class="text-xs text-slate-400">${session.browser}</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Session ID: ${session.session_id}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-white">${formatDuration(session.duration_seconds)}</p>
+                                <p class="text-xs text-slate-500">${new Date(session.session_start).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Show session details modal
+         */
+        async function showSessionDetails(sessionId) {
+            const data = await fetchAnalyticsData('session-details', { sessionId });
+            if (!data || !data.session) return;
+
+            const modal = document.getElementById('sessionModal');
+            const content = document.getElementById('modalContent');
+
+            const session = data.session;
+            const events = data.events || [];
+            const pageViews = data.pageViews || [];
+
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-slate-400 text-sm mb-1">Device</p>
+                            <p class="font-semibold text-white">${session.device_type || 'Unknown'}</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm mb-1">OS</p>
+                            <p class="font-semibold text-white">${session.os || 'Unknown'}</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm mb-1">Browser</p>
+                            <p class="font-semibold text-white">${session.browser || 'Unknown'}</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-400 text-sm mb-1">Duration</p>
+                            <p class="font-semibold text-white">${formatDuration(session.duration_seconds)}</p>
+                        </div>
+                    </div>
+
+                    ${session.city ? `
+                        <div>
+                            <p class="text-slate-400 text-sm mb-1">Location</p>
+                            <p class="font-semibold text-white">${session.city}, ${session.country}</p>
+                        </div>
+                    ` : ''}
+
+                    <div>
+                        <p class="text-slate-400 text-sm mb-2">Session Time</p>
+                        <p class="text-sm text-white">${new Date(session.session_start).toLocaleString()}</p>
+                    </div>
+
+                    ${events.length > 0 ? `
+                        <div>
+                            <h4 class="font-semibold text-white mb-3">Events (${events.length})</h4>
+                            <div class="space-y-2 max-h-96 overflow-y-auto">
+                                ${events.map(e => `
+                                    <div class="bg-slate-900/50 p-3 rounded text-xs">
+                                        <p class="font-mono text-cyan-400">${e.event_type}</p>
+                                        <p class="text-slate-400 mt-1">${new Date(e.timestamp).toLocaleTimeString()}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        /**
+         * Close modal
+         */
+        function closeModal() {
+            document.getElementById('sessionModal').classList.add('hidden');
+        }
+
+        /**
+         * Close modal when clicking outside
+         */
+        document.getElementById('sessionModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        /**
+         * Load all data
+         */
+        async function loadAllData() {
+            await Promise.all([
+                loadSummary(),
+                loadTrends(),
+                loadDeviceChart(),
+                loadBrowserChart(),
+                loadOSChart(),
+                loadCalculations(),
+                loadSessions()
+            ]);
+        }
+
+        // Initialize
+        loadAllData();
+        
+        // Refresh every 30 seconds
+        setInterval(loadAllData, 30000);
+    </script>
+</body>
+</html>
