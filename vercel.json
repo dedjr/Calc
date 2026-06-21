@@ -4,6 +4,5 @@
       "source": "/analytics",
       "destination": "/public/analytics.html"
     }
-  ],
-  "public": "public"
+  ]
 }
