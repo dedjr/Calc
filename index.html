@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tracker.js" defer></script>
     <title>DEBATRE - Kalkulator PLTS & Baterai LiFePO4</title>
     <style>
         body { font-family: 'Inter', system-ui, sans-serif; }
@@ -435,8 +436,11 @@
         </section>
 
         <!-- FOOTER -->
-        <footer class="text-center py-6 text-slate-500 text-sm">
-            &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
+        <footer class="text-center py-6 text-slate-500 text-sm border-t border-slate-800">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-3">
+                <span>&copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.</span>
+                <a href="/analytics.html" class="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold text-xs uppercase tracking-wider">📊 Analytics</a>
+            </div>
         </footer>
     </div>
 
@@ -511,6 +515,22 @@
             resultAh.textContent = fmt(Math.ceil(ah));
             resultWp.textContent = fmt(Math.ceil(wp));
             resultAmpere.textContent = loadAmpere.toFixed(1);
+
+            // Track calculation event
+            if (window.DEBATRE && window.DEBATRE.analytics) {
+                window.DEBATRE.analytics.trackCalculation('PLTS', {
+                    watt: watt,
+                    hours: hours,
+                    voltage: voltage,
+                    inverterEfficiency: inverterEfficiency,
+                    psh: psh
+                }, {
+                    batteryAh: Math.ceil(ah),
+                    solarPanelWp: Math.ceil(wp),
+                    loadAmpere: parseFloat(loadAmpere.toFixed(1)),
+                    chargeAmpere: parseFloat(chargeAmpere.toFixed(1))
+                });
+            }
 
             // LOGIKA SARAN DEFAULT & PERINGATAN OTOMATIS (24V vs 48V)
             let alertHtml = '';
