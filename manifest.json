@@ -1,0 +1,136 @@
+{
+  "name": "DEBATRE Kalkulator PLTS & Baterai LiFePO4",
+  "short_name": "DEBATRE",
+  "description": "Kalkulator PLTS dan Baterai LiFePO4 real-time untuk sistem off-grid. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah. Bekerja 100% offline tanpa internet.",
+  "id": "com.debatre.kalkulatorplts",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "dir": "ltr",
+  "lang": "id-ID",
+  "iarc_rating_id": "848e4b77-cfb5-4b47-8172-e1c72f7f9012",
+  "categories": ["productivity", "utilities"],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.debatre.kalkulatorplts",
+      "id": "com.debatre.kalkulatorplts"
+    }
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Kalkulator DEBATRE Mobile"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Kalkulator DEBATRE Desktop"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Buka Kalkulator",
+      "short_name": "Kalkulator",
+      "description": "Buka Kalkulator PLTS dengan cepat",
+      "url": "index.html",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "index.html",
+      "accept": {
+        "text/plain": [".txt"]
+      }
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "scope_extensions": [
+    {
+      "origin": "*.debatre.com"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+debatre",
+      "url": "/?target=%s"
+    }
+  ],
+  "share_target": {
+    "action": "index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "widgets": [
+    {
+      "name": "Kalkulator Widget",
+      "description": "Widget cepat kalkulator",
+      "tag": "calc-widget",
+      "template_url": "index.html",
+      "has_required_ui": false,
+      "multiple_allowed": true,
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "note_taking": {
+    "new_note_url": "index.html"
+  }
+}

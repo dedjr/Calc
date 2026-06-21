@@ -2,15 +2,24 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
-    <title>DEBATRE - Kalkulator PLTS & Baterai LiFePO4</title>
-    <meta name="description" content="Kalkulator PLTS dan Baterai LiFePO4 real-time oleh DEBATRE. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DEBATRE">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Kalkulator PLTS dan Baterai LiFePO4 real-time oleh DEBATRE. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah. Bekerja 100% offline.">
+    <meta name="application-name" content="DEBATRE Kalkulator PLTS">
+    <meta name="msapplication-TileColor" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%230f172a' width='192' height='192'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2306b6d4;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%2310b981;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='96' cy='96' r='80' fill='url(%23grad)' opacity='0.9'/%3E%3Cpath d='M96 40 L120 80 L120 120 Q96 140 72 120 L72 80 Z' fill='white' opacity='0.95'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%230f172a' width='192' height='192'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2306b6d4;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%2310b981;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='96' cy='96' r='80' fill='url(%23grad)' opacity='0.9'/%3E%3Cpath d='M96 40 L120 80 L120 120 Q96 140 72 120 L72 80 Z' fill='white' opacity='0.95'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+    <script src="tracker.js" defer></script>
+    <title>DEBATRE - Kalkulator PLTS & Baterai LiFePO4</title>
     <style>
         body { font-family: 'Inter', system-ui, sans-serif; }
         input[type="number"] { -moz-appearance: textfield; }
@@ -40,6 +49,13 @@
             color: #10b981;
             font-size: 2rem;
             font-weight: 900;
+        }
+        .shopee-product-card {
+            transition: all 0.3s ease;
+        }
+        .shopee-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
         }
     </style>
 </head>
@@ -139,6 +155,51 @@
                 </div>
             </div>
 
+            <!-- ADVANCED TOGGLE -->
+            <div class="mb-8 p-4 bg-slate-950/50 border border-slate-800 rounded-xl">
+                <button id="advancedToggle" class="flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m0 0h6M6 12a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                    <span id="advancedToggleText">Tampilkan Opsi Advanced</span>
+                </button>
+
+                <!-- ADVANCED OPTIONS (hidden by default) -->
+                <div id="advancedOptions" class="hidden mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Inverter Efficiency -->
+                    <div class="flex flex-col">
+                        <label for="inverterInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Efisiensi Inverter</label>
+                        <div class="relative">
+                            <select id="inverterInput"
+                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
+                                <option value="0.80">Low-end 80%</option>
+                                <option value="0.85" selected>Standard 85%</option>
+                                <option value="0.90">High-end 90%</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weather/Season Conditions -->
+                    <div class="flex flex-col">
+                        <label for="pshInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Kondisi Cuaca/Musim</label>
+                        <div class="relative">
+                            <select id="pshInput"
+                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
+                                <option value="5">Cerah (5 jam)</option>
+                                <option value="4">Berawan (4 jam)</option>
+                                <option value="3">Hujan (3 jam)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- RESULTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Baterai (Ah) -->
@@ -173,7 +234,7 @@
                     <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
                         <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
                     </p>
-                    <p class="text-xs text-slate-400 mt-3">PSH 5 jam, faktor 1.25</p>
+                    <p class="text-xs text-slate-400 mt-3">PSH <span id="pshNote">5 jam</span>, faktor 1.25</p>
                 </div>
 
                 <!-- Arus (Ampere) -->
@@ -206,23 +267,24 @@
             <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Urutan koneksi sistem PLTS Off-Grid</p>
 
             <div class="flex flex-col md:flex-row md:items-stretch md:justify-between gap-3">
-                <!-- Step 1 -->
-                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
-                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
-                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                <!-- Step 1: Battery -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="18" height="10" rx="2"/>
+                            <path d="M22 11v2"/>
                         </svg>
                     </div>
-                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 1</p>
-                    <p class="font-bold text-base sm:text-lg text-white text-center">Panel Surya</p>
+                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 1</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Baterai LiFePO4</p>
+                    <p class="text-xs text-slate-400 mt-2 text-center">Pasang ke Controller (MPPT/SCC)</p>
                 </div>
 
                 <div class="flex items-center justify-center arrow-flow">
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 2 -->
+                <!-- Step 2: Controller -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -231,30 +293,31 @@
                         </svg>
                     </div>
                     <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 2</p>
-                    <p class="font-bold text-base sm:text-lg text-white text-center">MPPT/SCC</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">PANEL SURYA</p>
+                    <p class="text-xs text-slate-400 mt-2 text-center">Pasang ke Controller (MPPT/SCC)</p>
                 </div>
 
                 <div class="flex items-center justify-center arrow-flow">
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 3 -->
-                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors">
-                    <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3">
-                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <rect x="2" y="7" width="18" height="10" rx="2"/>
-                            <path d="M22 11v2"/>
+                <!-- Step 3: Solar Panel -->
+                <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
                         </svg>
                     </div>
-                    <p class="text-xs text-cyan-400 font-bold mb-1">LANGKAH 3</p>
-                    <p class="font-bold text-base sm:text-lg text-white text-center">Baterai LiFePO4</p>
+                    <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 3</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Sambungkan Baterai ke INVERTER</p>
                 </div>
 
                 <div class="flex items-center justify-center arrow-flow">
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 4 -->
+                <!-- Step 4: Inverter -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-amber-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -262,14 +325,14 @@
                         </svg>
                     </div>
                     <p class="text-xs text-amber-400 font-bold mb-1">LANGKAH 4</p>
-                    <p class="font-bold text-base sm:text-lg text-white text-center">Inverter</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Colokan Beban AC ke Inverter</p>
                 </div>
 
                 <div class="flex items-center justify-center arrow-flow">
                     <span class="md:hidden">↓</span><span class="hidden md:inline">→</span>
                 </div>
 
-                <!-- Step 5 -->
+                <!-- Step 5: AC Load -->
                 <div class="flex-1 flex flex-col items-center p-4 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-emerald-500/50 transition-colors">
                     <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -277,7 +340,7 @@
                         </svg>
                     </div>
                     <p class="text-xs text-emerald-400 font-bold mb-1">LANGKAH 5</p>
-                    <p class="font-bold text-base sm:text-lg text-white text-center">Beban AC</p>
+                    <p class="font-bold text-base sm:text-lg text-white text-center">Sesuaikan Beban AC dengan Kapasitas Baterai</p>
                 </div>
             </div>
 
@@ -297,59 +360,272 @@
             </div>
         </section>
 
+        <!-- TOKOPEDIA CREATOR SHOWCASE SECTION -->
+        <section id="tokopediaSection" class="bg-gradient-to-br from-slate-900/60 to-slate-800/40 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+                🎬 Rekomendasi Produk TikTok
+            </h2>
+            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Temukan koleksi baterai LiFePO4 terbaik di Creator Showcase DEBATRE</p>
+
+            <div class="text-center mb-8">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    Berikut Rekomendasi Produk Jadi Baterai Langsung Pakai.
+                </p>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Showcase 1: 12V 100Ah -->
+                <a href="https://vt.tokopedia.com/t/ZS9jeygXeYy4K-94i5n/" target="_blank" rel="noopener noreferrer" 
+                   class="group bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-cyan-500 transition-all hover:shadow-lg hover:shadow-cyan-500/20">
+                    <div class="relative aspect-square bg-slate-700 overflow-hidden">
+                        <img src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/e1817e37cd554019bfa0bf8a3b2bfc12~tplv-aphluv4xwc-resize-webp:260:260.webp" 
+                             alt="Baterai LiFePO4 12V 100Ah" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22%236b7280%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z%22/%3E%3C/svg%3E'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-slate-200 text-sm mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                            Baterai lifepo4 12V 100Ah New Eco 4000-5000 Cycle Design Life 5-10 tahun untuk PLTS Solar Panel UPS Backup
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-3">TikTok Shop - DEBATRE</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-cyan-400 font-semibold text-sm">Lihat Produk →</span>
+                            <span class="inline-block px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-lg text-xs font-medium">Showcase 1</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Showcase 2: 24V 100Ah -->
+                <a href="https://vt.tokopedia.com/t/ZS9jeyquyXRyb-INQh6/" target="_blank" rel="noopener noreferrer" 
+                   class="group bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-purple-500 transition-all hover:shadow-lg hover:shadow-purple-500/20">
+                    <div class="relative aspect-square bg-slate-700 overflow-hidden">
+                        <img src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/82116f10b4bf46ca88fb3d2123511803~tplv-aphluv4xwc-resize-webp:260:260.webp" 
+                             alt="Baterai LiFePO4 24V 100Ah" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22%236b7280%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z%22/%3E%3C/svg%3E'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-slate-200 text-sm mb-2 line-clamp-2 group-hover:text-purple-400 transition-colors">
+                            Baterai LIifepo4 24V 100Ah New 3500-5000 Cycle untuk PLTS UPS Solar Panel UPS Server Starlink Eco
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-3">TikTok Shop - DEBATRE</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-purple-400 font-semibold text-sm">Lihat Produk →</span>
+                            <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 rounded-lg text-xs font-medium">Showcase 2</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Main Showcase Button -->
+            <div class="flex justify-center mb-8">
+                <a href="https://vt.tokopedia.com/t/ZS9jeDo9VHH1t-0CeFb/" target="_blank" rel="noopener noreferrer" 
+                   class="inline-block px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold text-lg rounded-xl transition-all hover:scale-105 shadow-lg hover:shadow-xl">
+                    → Showcase deddybaterai ←
+                </a>
+            </div>
+
+            <div class="mt-8 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
+                <p class="text-slate-400 text-sm text-center">
+                    💡 <span class="font-semibold text-slate-300">Tips:</span> Gunakan hasil kalkulator di atas untuk mencari spesifikasi baterai yang tepat sesuai kebutuhan sistem Anda.
+                </p>
+            </div>
+        </section>
+
         <!-- FOOTER -->
-        <footer class="text-center py-6 text-slate-500 text-sm">
-            &copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.
+        <footer class="text-center py-6 text-slate-500 text-sm border-t border-slate-800">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-3">
+                <span>&copy; <span id="currentYear"></span> DEBATRE. Dibuat untuk edukasi energi terbarukan.</span>
+                <a href="/analytics.html" class="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold text-xs uppercase tracking-wider">📊 Analytics</a>
+            </div>
         </footer>
     </div>
 
     <script>
-        (function() {
-            const wattInput = document.getElementById('wattInput');
-            const hoursInput = document.getElementById('hoursInput');
-            const voltageInput = document.getElementById('voltageInput');
-            const resultAh = document.getElementById('resultAh');
-            const resultWp = document.getElementById('resultWp');
-            const resultAmpere = document.getElementById('resultAmpere');
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
+      (function() {
+        const wattInput = document.getElementById('wattInput');
+        const hoursInput = document.getElementById('hoursInput');
+        const voltageInput = document.getElementById('voltageInput');
+        const inverterInput = document.getElementById('inverterInput');
+        const pshInput = document.getElementById('pshInput');
+        const advancedToggle = document.getElementById('advancedToggle');
+        const advancedOptions = document.getElementById('advancedOptions');
+        const advancedToggleText = document.getElementById('advancedToggleText');
+        const resultAh = document.getElementById('resultAh');
+        const resultWp = document.getElementById('resultWp');
+        const resultAmpere = document.getElementById('resultAmpere');
+        const pshNote = document.getElementById('pshNote');
+        const dynamicAlert = document.getElementById('dynamicAlert');
 
-            function fmt(n) {
-                if (!isFinite(n)) return '0';
-                return Math.round(n).toLocaleString('id-ID');
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Toggle Advanced Options
+        advancedToggle.addEventListener('click', function() {
+            advancedOptions.classList.toggle('hidden');
+            if (advancedOptions.classList.contains('hidden')) {
+                advancedToggleText.textContent = 'Tampilkan Opsi Advanced';
+            } else {
+                advancedToggleText.textContent = 'Sembunyikan Opsi Advanced';
+            }
+        });
+
+        function fmt(n) {
+            if (!isFinite(n)) return '0';
+            return Math.round(n).toLocaleString('id-ID');
+        }
+
+        function calculate() {
+            const watt = parseFloat(wattInput.value);
+            const hours = parseFloat(hoursInput.value);
+            const voltage = parseFloat(voltageInput.value);
+            const inverterEfficiency = parseFloat(inverterInput.value);
+            const psh = parseFloat(pshInput.value);
+
+            // Update PSH note
+            const pshLabels = { '5': '5 jam', '4': '4 jam', '3': '3 jam' };
+            pshNote.textContent = pshLabels[psh] || '5 jam';
+
+            if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
+                resultAh.textContent = '0';
+                resultWp.textContent = '0';
+                resultAmpere.textContent = '0';
+                dynamicAlert.classList.add('hidden');
+                return;
             }
 
-            function calculate() {
-                const watt = parseFloat(wattInput.value);
-                const hours = parseFloat(hoursInput.value);
-                const voltage = parseFloat(voltageInput.value);
+            // 1. Total Energi AC harian ditambah Faktor Efisiensi Inverter (dari advanced option)
+            const totalWhWithInverterLoss = (watt * hours) / inverterEfficiency;
 
-                if (isNaN(watt) || isNaN(hours) || isNaN(voltage) || watt <= 0 || hours <= 0 || voltage <= 0) {
-                    resultAh.textContent = '0';
-                    resultWp.textContent = '0';
-                    resultAmpere.textContent = '0';
-                    return;
-                }
+            // 2. Kapasitas Baterai (Ah) dengan LiFePO4 DoD 80%
+            const ah = totalWhWithInverterLoss / (voltage * 0.8);
 
-                // Baterai (Ah) dengan DoD 80%
-                const ah = (watt * hours) / voltage / 0.8;
-                // Panel Surya (Wp), PSH 5 jam, faktor 1.25
-                const wp = (watt * hours * 1.25) / 5;
-                // Arus inverter (A)
-                const ampere = watt / voltage;
+            // 3. Panel Surya (Wp) dengan PSH (dari advanced option) dan Faktor Pengali 1.25
+            const wp = (totalWhWithInverterLoss * 1.25) / psh;
 
-                resultAh.textContent = fmt(Math.ceil(ah));
-                resultWp.textContent = fmt(Math.ceil(wp));
-                resultAmpere.textContent = ampere.toFixed(1);
+            // 4. Arus Beban DC Aktual ke Inverter (A) termasuk losses
+            const loadAmpere = watt / inverterEfficiency / voltage;
+
+            // 5. Arus Pengisian dari Panel Surya ke Controller / SCC (A)
+            const chargeAmpere = wp / voltage;
+
+            // Tampilkan hasil ke UI
+            resultAh.textContent = fmt(Math.ceil(ah));
+            resultWp.textContent = fmt(Math.ceil(wp));
+            resultAmpere.textContent = loadAmpere.toFixed(1);
+
+            // Track calculation event
+            if (window.DEBATRE && window.DEBATRE.analytics) {
+                window.DEBATRE.analytics.trackCalculation('PLTS', {
+                    watt: watt,
+                    hours: hours,
+                    voltage: voltage,
+                    inverterEfficiency: inverterEfficiency,
+                    psh: psh
+                }, {
+                    batteryAh: Math.ceil(ah),
+                    solarPanelWp: Math.ceil(wp),
+                    loadAmpere: parseFloat(loadAmpere.toFixed(1)),
+                    chargeAmpere: parseFloat(chargeAmpere.toFixed(1))
+                });
             }
 
-            ['input', 'change'].forEach(ev => {
-                wattInput.addEventListener(ev, calculate);
-                hoursInput.addEventListener(ev, calculate);
-                voltageInput.addEventListener(ev, calculate);
+            // LOGIKA SARAN DEFAULT & PERINGATAN OTOMATIS (24V vs 48V)
+            let alertHtml = '';
+            dynamicAlert.className = "mt-6 p-5 rounded-xl border "; // reset class
+
+            if (voltage === 24 && (chargeAmpere > 100 || loadAmpere > 80)) {
+                // Bahaya/Peringatan di 24V jika arus terlalu besar
+                dynamicAlert.classList.remove('hidden');
+                dynamicAlert.classList.add('bg-amber-500/10', 'border-amber-500/40', 'text-amber-200');
+                
+                const sccCount60A = Math.ceil(chargeAmpere / 60);
+                const alternativeChargeAmpere = wp / 48;
+                const alternativeLoadAmpere = watt / inverterEfficiency / 48;
+
+                alertHtml = `
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">⚠️</span>
+                        <div>
+                            <p class="font-bold text-base text-amber-400 uppercase tracking-wide">Peringatan: Arus Terlalu Besar untuk Sistem 24V!</p>
+                            <p class="text-sm mt-1 text-slate-300 leading-relaxed">
+                                Arus pengisian dari panel ke SCC mencapai <span class="font-bold text-white">${chargeAmpere.toFixed(1)}A</span>. 
+                                Anda akan membutuhkan sedikitnya <span class="font-bold text-white">${sccCount60A} unit SCC MPPT 60A</span> secara paralel, serta kabel baterai yang sangat tebal (min. 35-50mm²) karena arus beban ke inverter mencapai <span class="font-bold text-white">${loadAmpere.toFixed(1)}A</span>.
+                            </p>
+                            <div class="mt-3 pt-3 border-t border-amber-500/20 text-sm">
+                                <p class="font-semibold text-emerald-400">💡 Saran Default Kreator:</p>
+                                <p class="text-slate-300 mt-1">
+                                    Sangat disarankan **Ubah ke Sistem 48V**. Jika menggunakan 48V:
+                                    <br>• Arus SCC turun menjadi: <span class="font-bold text-white">${alternativeChargeAmpere.toFixed(1)}A</span> (Cukup pakai 1-2 SCC saja).
+                                    <br>• Arus beban ke inverter turun menjadi: <span class="font-bold text-white">${alternativeLoadAmpere.toFixed(1)}A</span> (Lebih aman, kabel lebih tipis & dingin).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (voltage === 48 && chargeAmpere > 150) {
+                // Peringatan di 48V jika skala kapasitas super besar
+                dynamicAlert.classList.remove('hidden');
+                dynamicAlert.classList.add('bg-blue-500/10', 'border-blue-500/40', 'text-blue-200');
+                const sccCount100A = Math.ceil(chargeAmpere / 100);
+
+                alertHtml = `
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">ℹ️</span>
+                        <div>
+                            <p class="font-bold text-base text-blue-400">INFO ARCHITECTURE SISTEM (48V HIGH-POWER)</p>
+                            <p class="text-sm mt-1 text-slate-300 leading-relaxed">
+                                Sistem 48V Anda menghasilkan arus pengisian sebesar <span class="font-bold text-white">${chargeAmpere.toFixed(1)}A</span>. 
+                                Karena kapasitas melebihi batas 1 controller standar, Anda disarankan membagi rangkaian panel ke dalam <span class="font-bold text-white">${sccCount100A} unit SCC MPPT 80A/100A</span> secara paralel menuju satu busbar baterai yang sama.
+                            </p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Sistem dalam kondisi aman & ideal
+                dynamicAlert.classList.remove('hidden');
+                dynamicAlert.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-200');
+                alertHtml = `
+                    <div class="flex items-start gap-3">
+                        <span class="text-emerald-400 text-xl">✓</span>
+                        <div>
+                            <p class="font-bold text-sm text-emerald-400 uppercase tracking-wide">Konfigurasi Sistem Ideal</p>
+                            <p class="text-xs text-slate-400 mt-0.5">Arus pengisian SCC (${chargeAmpere.toFixed(1)}A) dan arus beban baterai (${loadAmpere.toFixed(1)}A) berada pada batas normal yang aman untuk ditangani oleh perangkat tunggal standar.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            dynamicAlert.innerHTML = alertHtml;
+        }
+
+        ['input', 'change'].forEach(ev => {
+            wattInput.addEventListener(ev, calculate);
+            hoursInput.addEventListener(ev, calculate);
+            voltageInput.addEventListener(ev, calculate);
+            inverterInput.addEventListener(ev, calculate);
+            pshInput.addEventListener(ev, calculate);
+        });
+
+        calculate();
+    })();
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('sw.js')
+            .then(function(registration) {
+              console.log('[PWA] Service Worker registered:', registration);
+            })
+            .catch(function(error) {
+              console.log('[PWA] Service Worker registration failed:', error);
             });
-
-            calculate();
-        })();
+        });
+      }
     </script>
 </body>
 </html>
