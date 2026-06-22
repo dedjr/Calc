@@ -11,10 +11,8 @@ jobs:
         with:
           urls: |
             https://debatre.com/
-          budgetPath: ./budget.json
-          # Kita hapus opsi uploadArtifacts dan biarkan dia menggunakan temporary storage
-          # Kita tambahkan config ini untuk mencegah konflik penamaan
+          # Menggunakan file lighthouserc.json yang baru
+          configPath: ./lighthouserc.json
           runs: 1
         env:
-          # Menonaktifkan semua fitur yang mencoba menulis ke artifact container GitHub
           LHCI_NO_ARTIFACTS: true
