@@ -1,0 +1,19 @@
+name: SEO and Performance Audit
+on: [push]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Audit URL with Lighthouse
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          # Ganti URL ini dengan domain staging/preview Vercel kamu
+          urls: |
+            https://debatre.com/
+          # Mengatur standar skor minimal (misal: SEO harus 90)
+          budgetPath: ./budget.json 
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
