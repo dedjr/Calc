@@ -9,11 +9,12 @@ jobs:
       - name: Audit URL with Lighthouse
         uses: treosh/lighthouse-ci-action@v9
         with:
-          # Ganti URL ini dengan domain staging/preview Vercel kamu
           urls: |
             https://debatre.com/
-          # Mengatur standar skor minimal (misal: SEO harus 90)
-          budgetPath: ./budget.json 
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-
+          budgetPath: ./budget.json
+          # Kita hapus opsi uploadArtifacts dan biarkan dia menggunakan temporary storage
+          # Kita tambahkan config ini untuk mencegah konflik penamaan
+          runs: 1
+        env:
+          # Menonaktifkan semua fitur yang mencoba menulis ke artifact container GitHub
+          LHCI_NO_ARTIFACTS: true
