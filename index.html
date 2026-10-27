@@ -69,10 +69,17 @@
             box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
         }
         /* Saat kolom input difokus/di-scroll, sisakan ruang untuk kartu hasil
-           yang mengambang di atas supaya kolomnya tidak tertutup. */
+           yang mengambang di atas supaya kolomnya tidak tertutup.
+           Tinggi kartu berbeda antara HP (~74px) dan desktop (~155px). */
         #wattInput, #hoursInput, #voltageInput,
         #inverterInput, #pshInput {
-            scroll-margin-top: 96px;
+            scroll-margin-top: 100px;
+        }
+        @media (min-width: 640px) {
+            #wattInput, #hoursInput, #voltageInput,
+            #inverterInput, #pshInput {
+                scroll-margin-top: 190px;
+            }
         }
     </style>
 </head>
