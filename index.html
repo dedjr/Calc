@@ -68,6 +68,12 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(6, 182, 212, 0.15);
         }
+        /* Saat kolom input difokus/di-scroll, sisakan ruang untuk kartu hasil
+           yang mengambang di atas supaya kolomnya tidak tertutup. */
+        #wattInput, #hoursInput, #voltageInput,
+        #inverterInput, #pshInput {
+            scroll-margin-top: 96px;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
@@ -134,7 +140,44 @@
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-white">
                 Kalkulator Kebutuhan PLTS
             </h2>
-            <p class="text-center text-slate-400 mb-8 text-sm sm:text-base">Masukkan data, hasil tampil otomatis</p>
+            <p class="text-center text-slate-400 mb-6 text-sm sm:text-base">Masukkan data, hasil tampil otomatis</p>
+
+            <!-- HASIL MENGAMBANG: menempel di atas layar supaya tetap terlihat
+                 saat mengetik di HP (keyboard tidak menutupi hasil).
+                 Tiga kartu dibuat satu baris di semua ukuran layar. -->
+            <div id="hasilMengambang"
+                 class="sticky top-0 z-40 -mx-5 sm:-mx-8 md:-mx-10 px-3 sm:px-8 md:px-10 py-2 sm:py-4 mb-6 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 shadow-lg shadow-black/40">
+                <div class="grid grid-cols-3 gap-1.5 sm:gap-4">
+
+                    <!-- Baterai (Ah) -->
+                    <div class="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-xl px-2 py-1.5 sm:p-4">
+                        <p class="text-[9px] sm:text-xs font-bold text-cyan-300 uppercase tracking-wide leading-tight">Baterai LiFePO4</p>
+                        <p class="mt-1 font-black text-white leading-none">
+                            <span id="resultAh" class="text-xl sm:text-4xl md:text-5xl">0</span><span class="text-[10px] sm:text-xl text-cyan-400 ml-0.5">Ah</span>
+                        </p>
+                        <p class="hidden sm:block text-[10px] text-slate-400 mt-1">Asumsi DoD 80%</p>
+                    </div>
+
+                    <!-- Panel Surya (Wp) -->
+                    <div class="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-xl px-2 py-1.5 sm:p-4">
+                        <p class="text-[9px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wide leading-tight">Panel Surya</p>
+                        <p class="mt-1 font-black text-white leading-none">
+                            <span id="resultWp" class="text-xl sm:text-4xl md:text-5xl">0</span><span class="text-[10px] sm:text-xl text-emerald-400 ml-0.5">Wp</span>
+                        </p>
+                        <p class="hidden sm:block text-[10px] text-slate-400 mt-1">PSH <span id="pshNote">5 jam</span>, faktor 1.25</p>
+                    </div>
+
+                    <!-- Arus (Ampere) -->
+                    <div class="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-xl px-2 py-1.5 sm:p-4">
+                        <p class="text-[9px] sm:text-xs font-bold text-amber-300 uppercase tracking-wide leading-tight">Arus Maks.</p>
+                        <p class="mt-1 font-black text-white leading-none">
+                            <span id="resultAmpere" class="text-xl sm:text-4xl md:text-5xl">0</span><span class="text-[10px] sm:text-xl text-amber-400 ml-0.5">A</span>
+                        </p>
+                        <p class="hidden sm:block text-[10px] text-slate-400 mt-1">Arus beban inverter</p>
+                    </div>
+
+                </div>
+            </div>
 
             <!-- INPUTS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
@@ -211,61 +254,7 @@
                 </div>
             </div>
 
-            <!-- RESULTS -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Baterai (Ah) -->
-                <div class="relative bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect x="2" y="7" width="18" height="10" rx="2"/>
-                                <path d="M22 11v2"/>
-                                <path d="M6 10v4M10 10v4M14 10v4"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-sm sm:text-base font-bold text-cyan-300 uppercase tracking-wider">Baterai LiFePO4</h3>
-                    </div>
-                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
-                        <span id="resultAh">0</span><span class="text-2xl sm:text-3xl text-cyan-400 ml-1">Ah</span>
-                    </p>
-                    <p class="text-xs text-slate-400 mt-3">Asumsi DoD 80%</p>
-                </div>
-
-                <!-- Panel Surya (Wp) -->
-                <div class="relative bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="4"/>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-sm sm:text-base font-bold text-emerald-300 uppercase tracking-wider">Panel Surya</h3>
-                    </div>
-                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
-                        <span id="resultWp">0</span><span class="text-2xl sm:text-3xl text-emerald-400 ml-1">Wp</span>
-                    </p>
-                    <p class="text-xs text-slate-400 mt-3">PSH <span id="pshNote">5 jam</span>, faktor 1.25</p>
-                </div>
-
-                <!-- Arus (Ampere) -->
-                <div class="relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-5 sm:p-6 overflow-hidden">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wider">Arus Maksimum</h3>
-                    </div>
-                    <p class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none">
-                        <span id="resultAmpere">0</span><span class="text-2xl sm:text-3xl text-amber-400 ml-1">A</span>
-                    </p>
-                    <p class="text-xs text-slate-400 mt-3">Arus beban inverter</p>
-                </div>
-            </div>
-
-            <p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
+<p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
                 <span class="font-semibold text-slate-300">Catatan:</span> Hasil adalah estimasi. Faktor efisiensi inverter, cuaca, dan profil penggunaan dapat mempengaruhi hasil aktual.
             </p>
         </main>

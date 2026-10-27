@@ -4,7 +4,7 @@
  * Memastikan aplikasi berfungsi 100% offline setelah diinstal
  */
 
-const CACHE_NAME = 'debatre-plts-v3';
+const CACHE_NAME = 'debatre-plts-v4';
 const OFFLINE_URL = '/index.html';
 
 const STATIC_ASSETS = [
