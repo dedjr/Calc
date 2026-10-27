@@ -71,16 +71,32 @@
         /* Saat kolom input difokus/di-scroll, sisakan ruang untuk kartu hasil
            yang mengambang di atas supaya kolomnya tidak tertutup.
            Tinggi kartu berbeda antara HP (~74px) dan desktop (~155px). */
-        #wattInput, #hoursInput, #voltageInput,
-        #inverterInput, #pshInput {
+        #wattInput, #hoursInput, #voltageInput {
             scroll-margin-top: 100px;
         }
         @media (min-width: 640px) {
-            #wattInput, #hoursInput, #voltageInput,
-            #inverterInput, #pshInput {
+            #wattInput, #hoursInput, #voltageInput {
                 scroll-margin-top: 190px;
             }
         }
+        /* Tombol pilih ikon cuaca & efisiensi inverter */
+        .pil { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .pil:active { transform: scale(0.97); }
+        .pil.aktif { transform: translateY(-1px); }
+        .pil-cuaca.aktif {
+            border-color: #fbbf24 !important;
+            background-color: rgba(251, 191, 36, 0.12) !important;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+        }
+        .pil-cuaca.aktif .pil-label { color: #fcd34d; }
+        .pil-cuaca.aktif .pil-sub { color: #fbbf24; }
+        .pil-eff.aktif {
+            border-color: #22d3ee !important;
+            background-color: rgba(34, 211, 238, 0.12) !important;
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+        }
+        .pil-eff.aktif .pil-label { color: #67e8f9; }
+        .pil-eff.aktif .pil-sub { color: #22d3ee; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
@@ -214,52 +230,59 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ADVANCED TOGGLE -->
-            <div class="mb-8 p-4 bg-slate-950/50 border border-slate-800 rounded-xl">
-                <button id="advancedToggle" class="flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m0 0h6M6 12a6 6 0 11-12 0 6 6 0 0112 0z"/>
-                    </svg>
-                    <span id="advancedToggleText">Tampilkan Opsi Advanced</span>
-                </button>
-
-                <!-- ADVANCED OPTIONS (hidden by default) -->
-                <div id="advancedOptions" class="hidden mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                    <!-- Inverter Efficiency -->
-                    <div class="flex flex-col">
-                        <label for="inverterInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Efisiensi Inverter</label>
-                        <div class="relative">
-                            <select id="inverterInput"
-                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
-                                <option value="0.80">Low-end 80%</option>
-                                <option value="0.85" selected>Standard 85%</option>
-                                <option value="0.90">High-end 90%</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                <!-- KONDISI CUACA (pilih ikon) -->
+                <div class="flex flex-col md:col-span-3">
+                    <span class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Kondisi Cuaca</span>
+                    <input type="hidden" id="pshInput" value="5">
+                    <div id="cuacaGroup" class="grid grid-cols-3 gap-2 sm:gap-4">
+                        <button type="button" data-psh="5" aria-pressed="true"
+                                class="pil pil-cuaca aktif h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="text-3xl sm:text-4xl leading-none">☀️</span>
+                            <span class="pil-label text-xs sm:text-sm font-bold text-slate-300 mt-1">Cerah</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500">5 jam</span>
+                        </button>
+                        <button type="button" data-psh="4" aria-pressed="false"
+                                class="pil pil-cuaca h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="text-3xl sm:text-4xl leading-none">🌤️</span>
+                            <span class="pil-label text-xs sm:text-sm font-bold text-slate-300 mt-1">Berawan</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500">4 jam</span>
+                        </button>
+                        <button type="button" data-psh="3" aria-pressed="false"
+                                class="pil pil-cuaca h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="text-3xl sm:text-4xl leading-none">🌧️</span>
+                            <span class="pil-label text-xs sm:text-sm font-bold text-slate-300 mt-1">Hujan</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500">3 jam</span>
+                        </button>
                     </div>
+                </div>
 
-                    <!-- Weather/Season Conditions -->
-                    <div class="flex flex-col">
-                        <label for="pshInput" class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Kondisi Cuaca/Musim</label>
-                        <div class="relative">
-                            <select id="pshInput"
-                                    class="w-full p-3 bg-slate-950 border-2 border-slate-800 rounded-xl focus:ring-4 focus:ring-cyan-500/30 focus:border-cyan-500 transition-all text-base font-semibold text-white appearance-none pr-10 outline-none cursor-pointer">
-                                <option value="5">Cerah (5 jam)</option>
-                                <option value="4">Berawan (4 jam)</option>
-                                <option value="3">Hujan (3 jam)</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                <!-- EFISIENSI INVERTER (pilih angka) -->
+                <div class="flex flex-col md:col-span-3">
+                    <span class="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Efisiensi Inverter</span>
+                    <input type="hidden" id="inverterInput" value="0.85">
+                    <div id="inverterGroup" class="grid grid-cols-3 gap-2 sm:gap-4">
+                        <button type="button" data-eff="0.90" aria-pressed="false"
+                                class="pil pil-eff h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="pil-label text-3xl sm:text-4xl font-black leading-none text-slate-200">90%</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500 mt-1">High-end</span>
+                        </button>
+                        <button type="button" data-eff="0.85" aria-pressed="true"
+                                class="pil pil-eff aktif h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="pil-label text-3xl sm:text-4xl font-black leading-none text-slate-200">85%</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500 mt-1">Standard</span>
+                        </button>
+                        <button type="button" data-eff="0.80" aria-pressed="false"
+                                class="pil pil-eff h-24 sm:h-28 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-slate-800 bg-slate-950 transition-all">
+                            <span class="pil-label text-3xl sm:text-4xl font-black leading-none text-slate-200">80%</span>
+                            <span class="pil-sub text-[10px] sm:text-xs text-slate-500 mt-1">Low-end</span>
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- SARAN & PERINGATAN OTOMATIS (24V vs 48V, jumlah SCC) -->
+            <div id="dynamicAlert" class="hidden mt-6 p-5 rounded-xl border"></div>
 
 <p class="text-xs sm:text-sm text-slate-400 text-center mt-8 leading-relaxed">
                 <span class="font-semibold text-slate-300">Catatan:</span> Hasil adalah estimasi. Faktor efisiensi inverter, cuaca, dan profil penggunaan dapat mempengaruhi hasil aktual.
@@ -404,9 +427,8 @@
         const voltageInput = document.getElementById('voltageInput');
         const inverterInput = document.getElementById('inverterInput');
         const pshInput = document.getElementById('pshInput');
-        const advancedToggle = document.getElementById('advancedToggle');
-        const advancedOptions = document.getElementById('advancedOptions');
-        const advancedToggleText = document.getElementById('advancedToggleText');
+        const cuacaGroup = document.getElementById('cuacaGroup');
+        const inverterGroup = document.getElementById('inverterGroup');
         const resultAh = document.getElementById('resultAh');
         const resultWp = document.getElementById('resultWp');
         const resultAmpere = document.getElementById('resultAmpere');
@@ -415,15 +437,28 @@
 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Toggle Advanced Options
-        advancedToggle.addEventListener('click', function() {
-            advancedOptions.classList.toggle('hidden');
-            if (advancedOptions.classList.contains('hidden')) {
-                advancedToggleText.textContent = 'Tampilkan Opsi Advanced';
-            } else {
-                advancedToggleText.textContent = 'Sembunyikan Opsi Advanced';
-            }
-        });
+        // PILIHAN IKON CUACA & ANGKA EFISIENSI INVERTER
+        // Tombol menyimpan nilainya ke input tersembunyi (#pshInput / #inverterInput)
+        // lalu menghitung ulang, jadi rumus lama tidak perlu diubah.
+        function pasangPil(grup, input, atribut) {
+            if (!grup || !input) return;
+            const tombol = grup.querySelectorAll('.pil');
+            tombol.forEach(function(t) {
+                t.addEventListener('click', function() {
+                    tombol.forEach(function(x) {
+                        x.classList.remove('aktif');
+                        x.setAttribute('aria-pressed', 'false');
+                    });
+                    t.classList.add('aktif');
+                    t.setAttribute('aria-pressed', 'true');
+                    input.value = t.dataset[atribut];
+                    calculate();
+                });
+            });
+        }
+
+        pasangPil(cuacaGroup, pshInput, 'psh');
+        pasangPil(inverterGroup, inverterInput, 'eff');
 
         function fmt(n) {
             if (!isFinite(n)) return '0';
