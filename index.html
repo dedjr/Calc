@@ -410,6 +410,29 @@
             </div>
         </section>
 
+
+        <!-- ARTIKEL: carousel auto-rotate + swipe -->
+        <section id="artikelSection" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <div class="flex items-end justify-between gap-4 mb-5">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">Artikel &amp; Panduan</h2>
+                    <p class="text-slate-400 text-sm mt-1">Geser, atau biarkan berganti sendiri.</p>
+                </div>
+                <a href="/artikel/" class="text-teal-400 hover:text-teal-300 text-[11px] font-bold uppercase tracking-wider whitespace-nowrap">Lihat semua &rarr;</a>
+            </div>
+
+            <div id="artWrap" class="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 select-none" style="touch-action:pan-y">
+                <div id="artTrack" class="flex transition-transform duration-500 ease-out will-change-transform"></div>
+
+                <button id="artPrev" type="button" aria-label="Artikel sebelumnya"
+                        class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 grid place-items-center w-9 h-9 rounded-full bg-slate-950/75 border border-white/20 text-white text-lg leading-none hover:bg-slate-900 active:scale-95 transition">&#8249;</button>
+                <button id="artNext" type="button" aria-label="Artikel berikutnya"
+                        class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 grid place-items-center w-9 h-9 rounded-full bg-slate-950/75 border border-white/20 text-white text-lg leading-none hover:bg-slate-900 active:scale-95 transition">&#8250;</button>
+
+                <div id="artDots" class="absolute bottom-2.5 left-0 right-0 z-20 flex justify-center gap-1.5"></div>
+            </div>
+        </section>
+
         <!-- FOOTER -->
         <footer class="text-center py-6 text-slate-500 text-sm border-t border-slate-800">
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-3">
@@ -614,6 +637,92 @@
             });
         });
       }
+    </script>
+
+    <script>
+      // Carousel artikel: auto-rotate, panah, titik, dan geser (swipe) di layar sentuh
+      (function () {
+        var wrap = document.getElementById('artWrap');
+        var track = document.getElementById('artTrack');
+        var dotsBox = document.getElementById('artDots');
+        if (!wrap || !track || !dotsBox) return;
+
+        var items = [
+          { n: 1, tag: 'Analisis',  t: 'Kita di Garis Khatulistiwa, Tapi Kalah', d: 'Vietnam 19,5 GW, Indonesia 1,5 GW. Kenapa bisa terjadi?' },
+          { n: 2, tag: 'Ekonomi',   t: 'Tarif 143% pada Panel Surya: Siapa yang Kena?', d: 'Bukan Indonesia — tapi efeknya sampai ke harga di sini.' },
+          { n: 3, tag: 'Kebijakan', t: 'Target 100 GW dalam 4 Tahun? Ini Hitungannya', d: '250 pembangkit dan 171.000 panel per hari.' },
+          { n: 4, tag: 'Industri',  t: 'Pabrik Sudah Ada, Harga Belum Turun?', d: '5 pertanyaan sebelum percaya pengumuman investasi.' },
+          { n: 5, tag: 'Teknologi', t: 'Panel Surya di Atas Air?', d: 'Hasilnya lebih tinggi — tapi tidak semua waduk cocok.' },
+          { n: 6, tag: 'Industri',  t: 'Pabrik Baterai Baru, Harga Kapan Turun?', d: 'Jawabannya bukan tahun ini. Ini urutan waktunya.' },
+          { n: 7, tag: 'Edukasi',   t: 'Sudah Pasang PLTS, Tagihan Masih Naik?', d: '5 kesalahan hitung yang bikin uang terbuang.' }
+        ];
+
+        var i = 0, timer = null;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        items.forEach(function (it, idx) {
+          var a = document.createElement('a');
+          a.href = '/artikel/artikel-' + it.n + '.html';
+          a.className = 'min-w-full block relative';
+          a.setAttribute('aria-label', it.t);
+          a.innerHTML =
+            '<img src="/artikel/thumb-' + it.n + '.png" alt="' + it.t + '" ' +
+            'class="w-full aspect-[1200/630] object-cover" width="1200" height="630" loading="' +
+            (idx < 2 ? 'eager' : 'lazy') + '">' +
+            '<div class="absolute inset-x-0 bottom-0 px-4 sm:px-6 pb-8 pt-16 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent">' +
+              '<span class="inline-block px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold uppercase tracking-wider mb-1.5">' + it.tag + '</span>' +
+              '<p class="text-white font-black text-sm sm:text-xl leading-snug">' + it.t + '</p>' +
+              '<p class="text-slate-300 text-xs sm:text-sm mt-1 hidden sm:block">' + it.d + '</p>' +
+            '</div>';
+          track.appendChild(a);
+
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', 'Ke artikel ' + (idx + 1));
+          dot.className = 'w-2 h-2 rounded-full transition-all';
+          dot.addEventListener('click', function () { go(idx); restart(); });
+          dotsBox.appendChild(dot);
+        });
+
+        var dots = dotsBox.children;
+
+        function paint() {
+          track.style.transform = 'translateX(-' + (i * 100) + '%)';
+          for (var k = 0; k < dots.length; k++) {
+            dots[k].className = 'rounded-full transition-all ' +
+              (k === i ? 'w-5 h-2 bg-teal-400' : 'w-2 h-2 bg-white/40 hover:bg-white/70');
+          }
+        }
+        function go(n) { i = (n + items.length) % items.length; paint(); }
+        function stop() { if (timer) { clearInterval(timer); timer = null; } }
+        function start() { if (reduce) return; stop(); timer = setInterval(function () { go(i + 1); }, 5000); }
+        function restart() { start(); }
+
+        document.getElementById('artPrev').addEventListener('click', function () { go(i - 1); restart(); });
+        document.getElementById('artNext').addEventListener('click', function () { go(i + 1); restart(); });
+
+        wrap.addEventListener('mouseenter', stop);
+        wrap.addEventListener('mouseleave', start);
+        wrap.addEventListener('focusin', stop);
+        wrap.addEventListener('focusout', start);
+        document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+
+        // geser / swipe
+        var x0 = null, y0 = null;
+        wrap.addEventListener('touchstart', function (e) {
+          x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; stop();
+        }, { passive: true });
+        wrap.addEventListener('touchend', function (e) {
+          if (x0 === null) return;
+          var dx = e.changedTouches[0].clientX - x0;
+          var dy = e.changedTouches[0].clientY - y0;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { go(dx < 0 ? i + 1 : i - 1); }
+          x0 = y0 = null; start();
+        }, { passive: true });
+
+        paint();
+        start();
+      })();
     </script>
 </body>
 </html>
