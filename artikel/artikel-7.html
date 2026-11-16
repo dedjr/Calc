@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="5 kesalahan hitung kebutuhan panel surya yang bikin uang terbuang: dari salah pakai satuan Watt, lupa efisiensi inverter, PSH asal-asalan, sampai lupa DoD baterai. Lengkap dengan contoh perhitungan.">
+    <title>5 Kesalahan Hitung Kebutuhan Panel Surya - DEBATRE</title>
+    <meta property="og:title" content="Sudah Pasang PLTS, Tagihan Masih Naik? 5 Kesalahan Hitung yang Bikin Uang Terbuang">
+    <meta property="og:description" content="Kesalahan nomor 3 paling sering terjadi. Cek cara hitung yang benar sebelum beli panel dan baterai.">
+    <meta property="og:image" content="artikel-7-thumb.png">
+    <meta property="og:type" content="article">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <a href="index.html" class="text-cyan-400 hover:text-cyan-300 text-sm font-semibold mb-8 inline-block">← Kembali ke Artikel</a>
+
+        <article class="prose prose-invert max-w-none">
+            <div class="mb-6">
+                <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-full mb-4">Edukasi</span>
+                <h1 class="text-4xl font-black text-white mb-2">5 Kesalahan Hitung Kebutuhan Panel Surya yang Bikin Uang Terbuang</h1>
+                <p class="text-slate-400">Dipublikasikan 16 November 2026 | Waktu baca: 9 menit</p>
+            </div>
+
+            <img src="artikel-7-thumb.png" alt="Ilustrasi kesalahan hitung kebutuhan panel surya" class="w-full rounded-xl border border-slate-800 mb-8" width="1200" height="630" loading="eager">
+
+            <div class="prose prose-invert text-slate-300 space-y-6">
+                <p>Hampir semua keluhan setelah pasang PLTS bisa diringkas jadi dua: <strong>“kok baterainya cepat habis?”</strong> atau <strong>“kok panelnya tidak cukup mengisi?”</strong>. Dua-duanya bermuara pada hal yang sama — perhitungan di awal yang tidak cocok dengan pemakaian nyata.</p>
+
+                <p>Masalahnya bukan rumus. Rumusnya sederhana. Yang sering keliru adalah <em>angka apa yang dimasukkan</em> ke dalam rumus itu. Berikut lima kesalahan yang paling sering saya temui, lengkap dengan cara membetulkannya.</p>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Kesalahan 1: memakai Watt, bukan Watt-jam</h2>
+
+                <p>Ini kesalahan paling dasar, tapi akibatnya besar. Angka di label barang adalah <strong>daya</strong> (Watt), bukan <strong>energi</strong> (Watt-jam). Yang perlu dihitung untuk kebutuhan harian adalah energi — daya dikali lama pemakaian.</p>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-5 my-6">
+                    <p class="text-sm text-slate-300 mb-2"><strong>Contoh nyata:</strong></p>
+                    <p class="text-sm text-slate-300">Kulkas tertulis 100 W. Kalau dihitung “100 W”, orang menyimpulkan butuh panel kecil. Padahal kulkas menyala 24 jam:</p>
+                    <p class="text-cyan-300 font-bold mt-2">100 W × 24 jam = 2.400 Wh/hari</p>
+                    <p class="text-sm text-slate-400 mt-2">Angka 2.400 Wh itu setara lebih dari dua pertiga seluruh kebutuhan rumah contoh di bawah nanti. Satu kulkas bisa lebih berat daripada lima lampu.</p>
+                </div>
+
+                <p>Aturan praktisnya: kalau barang menyala terus (kulkas, router, CCTV, pompa kolam), kalikan dengan 24 jam. Kalau dipakai sesaat, kalikan durasi nyatanya — bukan durasi “dicolok”.</p>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Kesalahan 2: mengabaikan efisiensi inverter dan rugi-rugi</h2>
+
+                <p>Energi yang keluar dari baterai tidak seluruhnya sampai ke alat listrik. Ada inverter yang bekerja di kisaran efisiensi 85–95%, ada rugi kabel, rugi panas, dan rugi standby. Kalau semua itu diabaikan, baterai akan selalu terasa “kurang”.</p>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-5 my-6">
+                    <p class="text-sm text-slate-300 mb-2"><strong>Cara membetulkan:</strong> bagi kebutuhan beban dengan efisiensi sistem.</p>
+                    <p class="text-cyan-300 font-bold">Wh baterai = Wh beban ÷ η</p>
+                    <p class="text-sm text-slate-400 mt-2">Dengan η = 0,85: beban 3.370 Wh menjadi <strong>3.965 Wh</strong> yang harus disediakan baterai. Selisih 595 Wh itu bukan angka kecil — itu setara satu panel 150 Wp bekerja 4 jam.</p>
+                </div>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Kesalahan 3: menganggap PSH selalu 5 sepanjang tahun <span class="text-amber-300">(paling sering)</span></h2>
+
+                <p>PSH (<em>Peak Sun Hours</em>) adalah lama “matahari setara puncak” per hari. Banyak orang memakai angka 5 karena itu yang paling enak dilihat di brosur. Padahal di Indonesia angka itu hanya berlaku di musim kemarau dan di wilayah tertentu.</p>
+
+                <p>Untuk pemakaian sepanjang tahun, perhitungan harus memakai kondisi terburuk yang masih wajar — bukan kondisi terbaik:</p>
+
+                <ul class="space-y-2 text-slate-300">
+                    <li>• <strong>Cerah (kemarau):</strong> ±5 jam puncak</li>
+                    <li>• <strong>Berawan:</strong> ±4 jam puncak</li>
+                    <li>• <strong>Hujan / mendung tebal:</strong> ±3 jam puncak</li>
+                </ul>
+
+                <p>Kalau panel dihitung dengan PSH 5 lalu kenyataannya musim hujan, output bisa turun hampir setengah. Itu sebabnya banyak PLTS “normal di Agustus, mati di Januari”.</p>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Kesalahan 4: lupa cadangan 25%</h2>
+
+                <p>Panel yang dijual di pasaran diukur di laboratorium, kondisi bersih, suhu ideal, tanpa bayangan. Di atap rumah ada debu, daun, bayangan tiang, panas yang menurunkan tegangan, dan penuaan panel. Faktor cadangan 1,25 dipakai untuk menutup semua itu.</p>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-5 my-6">
+                    <p class="text-cyan-300 font-bold">Wp panel = (Wh × 1,25) ÷ PSH</p>
+                    <p class="text-sm text-slate-400 mt-2">Tanpa faktor 1,25, panel akan pas-pasan saat cuaca bagus dan <strong>kurang</strong> saat cuaca buruk — tepat ketika listrik paling dibutuhkan.</p>
+                </div>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Kesalahan 5: menghitung baterai tanpa DoD</h2>
+
+                <p>Ini yang paling mahal akibatnya. Baterai tidak boleh dikosongkan 100%. Untuk lithium (LiFePO4) aman di kisaran 80% (DoD 0,8); untuk timbal/aki (SLA) sebaiknya 50% (DoD 0,5). Kalau DoD diabaikan, kapasitas baterai yang dibeli bisa hanya separuh dari yang dibutuhkan.</p>
+
+                <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-5 my-6">
+                    <p class="text-cyan-300 font-bold">Ah baterai = Wh ÷ (Tegangan × DoD)</p>
+                    <p class="text-sm text-slate-400 mt-2">Beban 3.965 Wh di sistem 24 V: lithium → 3.965 ÷ (24 × 0,8) = <strong>206 Ah</strong>. Kalau memakai aki SLA → 3.965 ÷ (24 × 0,5) = <strong>330 Ah</strong>. Beda 124 Ah, dan itu beda biaya yang sangat nyata.</p>
+                </div>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Contoh perhitungan lengkap (biar terlihat bedanya)</h2>
+
+                <p>Rumah kecil dengan beban berikut:</p>
+
+                <div class="overflow-x-auto my-6">
+                    <table class="w-full text-sm border border-slate-800">
+                        <thead class="bg-slate-900/70 text-slate-300">
+                            <tr>
+                                <th class="text-left px-3 py-2 border-b border-slate-800">Beban</th>
+                                <th class="text-right px-3 py-2 border-b border-slate-800">Daya</th>
+                                <th class="text-right px-3 py-2 border-b border-slate-800">Jam/hari</th>
+                                <th class="text-right px-3 py-2 border-b border-slate-800">Wh/hari</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-300">
+                            <tr><td class="px-3 py-2 border-b border-slate-800/60">Lampu 5 titik</td><td class="text-right px-3 py-2 border-b border-slate-800/60">50 W</td><td class="text-right px-3 py-2 border-b border-slate-800/60">6</td><td class="text-right px-3 py-2 border-b border-slate-800/60">300</td></tr>
+                            <tr><td class="px-3 py-2 border-b border-slate-800/60">Kulkas</td><td class="text-right px-3 py-2 border-b border-slate-800/60">100 W</td><td class="text-right px-3 py-2 border-b border-slate-800/60">24</td><td class="text-right px-3 py-2 border-b border-slate-800/60">2.400</td></tr>
+                            <tr><td class="px-3 py-2 border-b border-slate-800/60">TV</td><td class="text-right px-3 py-2 border-b border-slate-800/60">60 W</td><td class="text-right px-3 py-2 border-b border-slate-800/60">5</td><td class="text-right px-3 py-2 border-b border-slate-800/60">300</td></tr>
+                            <tr><td class="px-3 py-2 border-b border-slate-800/60">Pompa air</td><td class="text-right px-3 py-2 border-b border-slate-800/60">125 W</td><td class="text-right px-3 py-2 border-b border-slate-800/60">2</td><td class="text-right px-3 py-2 border-b border-slate-800/60">250</td></tr>
+                            <tr><td class="px-3 py-2 border-b border-slate-800/60">Charger &amp; router</td><td class="text-right px-3 py-2 border-b border-slate-800/60">30 W</td><td class="text-right px-3 py-2 border-b border-slate-800/60">4</td><td class="text-right px-3 py-2 border-b border-slate-800/60">120</td></tr>
+                            <tr class="bg-slate-900/70 font-bold text-cyan-300"><td class="px-3 py-2">Total beban</td><td class="px-3 py-2"></td><td class="px-3 py-2"></td><td class="text-right px-3 py-2">3.370</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>Lalu diteruskan dengan rumus yang benar:</p>
+
+                <ul class="space-y-2 text-slate-300">
+                    <li>• <strong>Wh baterai</strong> = 3.370 ÷ 0,85 = <strong>3.965 Wh</strong></li>
+                    <li>• <strong>Panel (hujan, PSH 3)</strong> = (3.965 × 1,25) ÷ 3 ≈ <strong>1.652 Wp</strong></li>
+                    <li>• <strong>Panel (berawan, PSH 4)</strong> = (3.965 × 1,25) ÷ 4 ≈ <strong>1.239 Wp</strong></li>
+                    <li>• <strong>Panel (cerah, PSH 5)</strong> = (3.965 × 1,25) ÷ 5 ≈ <strong>991 Wp</strong></li>
+                    <li>• <strong>Baterai lithium 24 V</strong> = 3.965 ÷ (24 × 0,8) ≈ <strong>206 Ah</strong></li>
+                    <li>• <strong>Baterai SLA 24 V</strong> = 3.965 ÷ (24 × 0,5) ≈ <strong>330 Ah</strong></li>
+                </ul>
+
+                <p>Perhatikan: untuk beban yang sama, kebutuhan panel bisa berbeda <strong>1.652 Wp vs 991 Wp</strong> — selisih 661 Wp hanya karena pilihan PSH. Kalau sejak awal memakai PSH 5 (angka tercantik), sistem akan kekurangan daya setiap kali langit tidak bersahabat.</p>
+
+                <p>Dari sisi arus juga perlu dicek, supaya kabel dan controller tidak menjadi titik lemah:</p>
+
+                <ul class="space-y-2 text-slate-300">
+                    <li>• Arus beban = Daya ÷ (η × V) — contoh pompa 125 W di 24 V: 125 ÷ (0,85 × 24) ≈ 6,1 A</li>
+                    <li>• Arus isi = Wp ÷ V — panel 1.239 Wp di 24 V ≈ 51,6 A, artinya SCC harus di atas angka itu</li>
+                </ul>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Cara cepat memeriksa hitungan sendiri</h2>
+
+                <p>Sebelum membeli apa pun, pastikan lima hal ini sudah ada di kertas hitungan:</p>
+
+                <ul class="space-y-2 text-slate-300">
+                    <li>• Semua beban ditulis dalam <strong>Wh per hari</strong>, bukan Watt</li>
+                    <li>• Ada pembagian dengan <strong>efisiensi inverter</strong> (0,85–0,95)</li>
+                    <li>• PSH memakai skenario <strong>terburuk yang wajar</strong>, bukan rata-rata terbaik</li>
+                    <li>• Panel dikali <strong>1,25</strong> sebagai cadangan</li>
+                    <li>• Baterai dibagi <strong>DoD</strong> (0,8 lithium / 0,5 SLA)</li>
+                </ul>
+
+                <p>Kalau salah satu hilang, hasilnya bukan sekadar “kurang presisi” — hasilnya bisa berarti beli panel dua kali, atau beli baterai yang dari awal sudah tidak cukup.</p>
+
+                <p>Untuk menghindari hitung manual yang rawan salah, gunakan <a href="/" class="text-cyan-400 hover:text-cyan-300 underline">kalkulator DEBATRE</a>. Masukkan daya output, jam pemakaian, tegangan sistem, kondisi cuaca, dan efisiensi inverter — hasilnya langsung berupa kebutuhan panel (Wp), baterai (Ah), arus beban, dan arus pengisian. Semua rumus di artikel ini sudah dipakai di sana.</p>
+
+                <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-6 my-8">
+                    <p class="text-sm text-slate-400"><strong>Kesimpulan:</strong> kesalahan yang paling mahal bukan pada rumus, tapi pada angka yang dimasukkan. Memakai Watt sebagai ganti Watt-jam, mengabaikan efisiensi, memilih PSH 5 untuk pemakaian sepanjang tahun, melupakan cadangan 25%, dan menghitung baterai tanpa DoD — lima hal ini yang membuat biaya membengkak atau sistem kekurangan. Betulkan kelimanya, dan pembelian pertama biasanya sudah cukup.</p>
+                </div>
+
+                <h2 class="text-2xl font-bold text-cyan-300">Catatan metode</h2>
+
+                <p class="text-sm text-slate-400">Artikel ini bersifat edukasi perhitungan, bukan rekomendasi merek. Rumus yang dipakai: energi (Wh) = daya (W) × jam pemakaian; kebutuhan baterai dibagi efisiensi sistem; kapasitas panel = (Wh × 1,25) ÷ PSH; kapasitas baterai (Ah) = Wh ÷ (tegangan × DoD). Rentang PSH 3–5 jam pukul untuk Indonesia dan rentang efisiensi inverter 85–95% adalah rentang praktik umum; nilai sesungguhnya bergantung lokasi, orientasi atap, kemiringan panel, dan mutu komponen. Semua hasil bersifat estimasi — selalu bandingkan dengan pengukuran nyata setelah sistem terpasang.</p>
+            </div>
+        </article>
+
+        <footer class="border-t border-slate-800 mt-12 pt-8 text-center text-slate-500 text-sm">
+            <p>&copy; 2026 DEBATRE. Informasi energi terbarukan untuk Indonesia.</p>
+        </footer>
+    </div>
+</body>
+</html>
