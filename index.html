@@ -720,6 +720,14 @@
           x0 = y0 = null; start();
         }, { passive: true });
 
+        // preload semua thumbnail setelah halaman siap, supaya tidak kosong sesaat
+        // ketika slide berganti (gambar lazy yang di luar viewport belum terunduh).
+        function preloadAll() {
+          items.forEach(function (it) { var im = new Image(); im.src = '/artikel/thumb-' + it.n + '.png'; });
+        }
+        if ('requestIdleCallback' in window) { requestIdleCallback(preloadAll, { timeout: 2500 }); }
+        else { setTimeout(preloadAll, 1500); }
+
         paint();
         start();
       })();
