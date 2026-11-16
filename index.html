@@ -659,6 +659,8 @@
 
         var i = 0, timer = null;
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Hormati reduce-motion dengan mematikan ANIMASI, bukan autoplay-nya.
+        if (reduce) { track.style.transition = 'none'; }
 
         items.forEach(function (it, idx) {
           var a = document.createElement('a');
@@ -695,14 +697,19 @@
         }
         function go(n) { i = (n + items.length) % items.length; paint(); }
         function stop() { if (timer) { clearInterval(timer); timer = null; } }
-        function start() { if (reduce) return; stop(); timer = setInterval(function () { go(i + 1); }, 5000); }
+        function start() {
+          stop();
+          timer = setInterval(function () { go(i + 1); }, 5000);
+        }
+        var resumeT = null;
+        function resumeSoon() { if (resumeT) clearTimeout(resumeT); resumeT = setTimeout(start, 9000); }
         function restart() { start(); }
 
         document.getElementById('artPrev').addEventListener('click', function () { go(i - 1); restart(); });
         document.getElementById('artNext').addEventListener('click', function () { go(i + 1); restart(); });
 
-        wrap.addEventListener('mouseenter', stop);
-        wrap.addEventListener('mouseleave', start);
+        // Autoplay TIDAK berhenti hanya karena kursor berada di atas seksi.
+        // Berhenti hanya saat fokus keyboard, tab tidak aktif, atau user menyentuh.
         wrap.addEventListener('focusin', stop);
         wrap.addEventListener('focusout', start);
         document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
@@ -717,7 +724,8 @@
           var dx = e.changedTouches[0].clientX - x0;
           var dy = e.changedTouches[0].clientY - y0;
           if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { go(dx < 0 ? i + 1 : i - 1); }
-          x0 = y0 = null; start();
+          x0 = y0 = null;
+          resumeSoon();
         }, { passive: true });
 
         // preload semua thumbnail setelah halaman siap, supaya tidak kosong sesaat
