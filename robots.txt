@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /analytics.html
+Disallow: /api/
+Disallow: /tracker.js
+
+Sitemap: https://www.debatre.com/sitemap.xml

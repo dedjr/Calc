@@ -21,6 +21,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="tracker.js" defer></script>
     <title>DEBATRE - Kalkulator PLTS & Baterai LiFePO4</title>
+<!-- SEO-OG -->
+    <link rel="canonical" href="https://www.debatre.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DEBATRE">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:title" content="DEBATRE - Kalkulator PLTS &amp; Baterai LiFePO4">
+    <meta property="og:description" content="Kalkulator PLTS dan Baterai LiFePO4 real-time oleh DEBATRE. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah. Bekerja 100% offline.">
+    <meta property="og:url" content="https://www.debatre.com/">
+    <meta property="og:image" content="https://www.debatre.com/artikel-1-thumb.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DEBATRE - Kalkulator PLTS &amp; Baterai LiFePO4">
+    <meta name="twitter:description" content="Kalkulator PLTS dan Baterai LiFePO4 real-time oleh DEBATRE. Hitung kebutuhan baterai, panel surya, dan SCC dengan mudah. Bekerja 100% offline.">
+    <meta name="twitter:image" content="https://www.debatre.com/artikel-1-thumb.png">
+
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1Z5TLJNJ05"></script>
@@ -98,6 +114,36 @@
         .pil-eff.aktif .pil-label { color: #67e8f9; }
         .pil-eff.aktif .pil-sub { color: #22d3ee; }
     </style>
+
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DEBATRE - Kalkulator PLTS & Baterai LiFePO4",
+  "url": "https://www.debatre.com/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Web, Android, iOS",
+  "inLanguage": "id-ID",
+  "description": "Kalkulator kebutuhan baterai LiFePO4, panel surya, dan SCC untuk PLTS. Menghitung Ah, Wp, dan ampere pengisian secara real-time.",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "IDR"},
+  "featureList": [
+    "Hitung kapasitas baterai (Ah) dengan asumsi DoD 80%",
+    "Hitung kebutuhan panel surya (Wp) memakai PSH dan faktor 1,25",
+    "Hitung arus pengisian SCC dalam ampere",
+    "Bekerja offline setelah dibuka pertama kali"
+  ]
+}</script>
+
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Berapa kedalaman pengosongan (DoD) yang aman untuk baterai LiFePO4?", "acceptedAnswer": {"@type": "Answer", "text": "Untuk LiFePO4, kedalaman pengosongan 80% masih aman untuk pemakaian harian dan kalkulator ini memakai asumsi 80%. Menekan DoD ke 70% membuat umur siklus lebih panjang, tetapi kapasitas baterai yang dibeli harus lebih besar."}},
+    {"@type": "Question", "name": "Kenapa hasil perhitungan panel surya lebih besar dari beban?", "acceptedAnswer": {"@type": "Answer", "text": "Karena ada dua penyesuaian: susut inverter (asumsi 85%) dan faktor pengali 1,25 untuk mengkompensasi cuaca mendung, debu panel, serta kehilangan pada kabel dan SCC. Rumusnya: Wp = (Wh beban ÷ efisiensi inverter × 1,25) ÷ PSH."}},
+    {"@type": "Question", "name": "Apa itu PSH dan berapa nilainya di Indonesia?", "acceptedAnswer": {"@type": "Answer", "text": "PSH (Peak Sun Hours) adalah jumlah jam matahari efektif per hari. Sebagian besar wilayah Indonesia berada di 4–5 jam; kalkulator memakai 5 jam sebagai bawaan dan bisa diubah lewat opsi lanjutan."}},
+    {"@type": "Question", "name": "Apakah kalkulator ini butuh internet?", "acceptedAnswer": {"@type": "Answer", "text": "Tidak. Setelah halaman terbuka sekali, kalkulator bekerja offline dan bisa dipasang seperti aplikasi di HP."}},
+    {"@type": "Question", "name": "Apakah hasil kalkulator bisa langsung dipakai untuk membeli komponen?", "acceptedAnswer": {"@type": "Answer", "text": "Hasilnya adalah perkiraan perencanaan, bukan jaminan. Tambahkan margin 10–20% pada kapasitas baterai dan panel, lalu sesuaikan dengan spesifikasi SCC serta kabel yang dipakai."}}
+  ]
+}</script>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
 
@@ -290,6 +336,96 @@
         </main>
 
         <!-- ARTIKEL TERBARU: carousel auto-rotate + swipe -->
+        
+        <!-- SEO-KONTEN: blok isi untuk pengunjung & mesin pencari -->
+        <section id="panduan" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Cara Menghitung Kebutuhan Baterai &amp; Panel Surya</h2>
+            <p class="text-slate-300 mb-4">
+                Kalkulator ini menjawab satu pertanyaan yang paling sering muncul sebelum membeli
+                komponen PLTS: <strong>berapa kapasitas baterai (Ah) dan berapa besar panel surya
+                (Wp) yang saya butuhkan?</strong> Hasilnya muncul seketika saat Anda mengubah angka
+                pemakaian.
+            </p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">Tiga angka yang perlu Anda siapkan</h3>
+            <ol class="list-decimal pl-6 space-y-2 text-slate-300">
+                <li><strong>Daya peralatan (watt)</strong> — jumlahkan semua alat yang akan dinyalakan bersamaan.
+                    Lampu 10 W × 4, kulkas 100 W, TV 60 W berarti 200 W.</li>
+                <li><strong>Lama pakai (jam)</strong> — berapa jam peralatan itu menyala setiap hari, bukan per malam saja.</li>
+                <li><strong>Tegangan sistem (V)</strong> — 12 V untuk beban kecil, 24 V atau 48 V untuk beban besar.
+                    Tegangan lebih tinggi membuat arus lebih kecil dan kabel lebih ringan.</li>
+            </ol>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">Contoh perhitungan lengkap</h3>
+            <p class="text-slate-300 mb-3">
+                Misalkan beban 500 W menyala 6 jam sehari, sistem 24 V, PSH 5 jam, dan inverter
+                ber-efisiensi 85%. Langkahnya:
+            </p>
+            <ol class="list-decimal pl-6 space-y-2 text-slate-300">
+                <li>Energi beban: 500 W × 6 jam = <strong>3.000 Wh</strong>.</li>
+                <li>Tambahkan susut inverter: 3.000 Wh ÷ 0,85 = <strong>±3.529 Wh</strong>.</li>
+                <li>Kapasitas baterai (DoD 80%): 3.529 Wh ÷ (24 V × 0,8) = <strong>±184 Ah</strong>.</li>
+                <li>Kebutuhan panel: (3.529 Wh × 1,25) ÷ 5 jam = <strong>±882 Wp</strong>.</li>
+            </ol>
+            <p class="text-slate-300 mt-3">
+                Jadi perencanaannya: baterai LiFePO4 24 V sekitar 200 Ah, panel 900–1.000 Wp
+                (misalnya 2 panel 550 Wp), dan SCC yang mampu menangani arus pengisian sesuai
+                tegangan sistem. Angka pada kalkulator dibulatkan ke atas, sama seperti contoh ini.
+            </p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">Lima kesalahan yang paling sering terjadi</h3>
+            <ol class="list-decimal pl-6 space-y-2 text-slate-300">
+                <li><strong>Menganggap baterai bisa dikosongkan 100%.</strong> Untuk pemakaian harian,
+                    gunakan asumsi DoD 80% seperti kalkulator ini.</li>
+                <li><strong>Lupa susut inverter.</strong> Inverter mengubah DC ke AC dengan efisiensi
+                    85–95%; mengabaikannya membuat baterai cepat habis.</li>
+                <li><strong>PSH terlalu optimis.</strong> Memakai 6–7 jam matahari membuat panel terpasang
+                    terlalu kecil untuk musim mendung.</li>
+                <li><strong>SCC dan kabel tidak dihitung.</strong> Arus pengisian yang besar butuh SCC dengan
+                    kapasitas ampere memadai dan kabel yang tidak panas.</li>
+                <li><strong>Menaruh baterai di tempat panas.</strong> Suhu tinggi memperpendek umur LiFePO4;
+                    sediakan ventilasi dan hindari sinar matahari langsung.</li>
+            </ol>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">Kapan perlu menambah panel atau baterai</h3>
+            <p class="text-slate-300">
+                Jika baterai sering turun di bawah 20% sebelum pagi, tambahkan kapasitas baterai.
+                Jika baterai tidak pernah penuh pada siang hari, tambahkan panel. Dua gejala ini
+                berbeda dan penanganannya juga berbeda — menambah panel tidak akan menolong bila
+                baterainya sudah terlalu kecil.
+            </p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">Pertanyaan yang sering diajukan</h3>
+            <div class="space-y-4 text-slate-300">
+                <div>
+                    <p class="font-semibold text-white">Berapa kedalaman pengosongan (DoD) yang aman untuk baterai LiFePO4?</p>
+                    <p>Untuk LiFePO4, kedalaman pengosongan 80% masih aman untuk pemakaian harian dan kalkulator ini memakai asumsi 80%. Menekan DoD ke 70% membuat umur siklus lebih panjang, tetapi kapasitas baterai yang dibeli harus lebih besar.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Kenapa hasil perhitungan panel surya lebih besar dari beban?</p>
+                    <p>Karena ada dua penyesuaian: susut inverter (asumsi 85%) dan faktor pengali 1,25 untuk mengkompensasi cuaca mendung, debu panel, serta kehilangan pada kabel dan SCC. Rumusnya: Wp = (Wh beban ÷ efisiensi inverter × 1,25) ÷ PSH.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Apa itu PSH dan berapa nilainya di Indonesia?</p>
+                    <p>PSH (Peak Sun Hours) adalah jumlah jam matahari efektif per hari. Sebagian besar wilayah Indonesia berada di 4–5 jam; kalkulator memakai 5 jam sebagai bawaan dan bisa diubah lewat opsi lanjutan.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Apakah kalkulator ini butuh internet?</p>
+                    <p>Tidak. Setelah halaman terbuka sekali, kalkulator bekerja offline dan bisa dipasang seperti aplikasi di HP.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Apakah hasil kalkulator bisa langsung dipakai untuk membeli komponen?</p>
+                    <p>Hasilnya adalah perkiraan perencanaan, bukan jaminan. Tambahkan margin 10–20% pada kapasitas baterai dan panel, lalu sesuaikan dengan spesifikasi SCC serta kabel yang dipakai.</p>
+                </div>
+            </div>
+
+            <p class="text-slate-300 mt-6">
+                Baca lanjutan: <a class="text-cyan-400 underline" href="/artikel/artikel-7.html">5 kesalahan hitung kebutuhan panel surya</a>,
+                <a class="text-cyan-400 underline" href="/artikel/artikel-2.html">arti tarif 143% bagi pembeli panel</a>, dan
+                <a class="text-cyan-400 underline" href="/artikel/artikel-5.html">PLTS terapung: keunggulan dan tantangannya</a>.
+            </p>
+        </section>
+
         <section id="artikelSection" class="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-3xl p-5 sm:p-8 md:p-10 mb-8">
             <div class="flex flex-wrap items-end justify-between gap-3 mb-5">
                 <div>
